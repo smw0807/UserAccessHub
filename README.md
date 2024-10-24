@@ -1,73 +1,53 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# UserAccessHub
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+UserAccessHub는 사용자 관리 및 인증을 위한 RESTful API와 GraphQL 기반의 애플리케이션입니다. 이 프로젝트는 JWT 기반 인증 시스템과 OAuth2 소셜 로그인 기능을 제공하며, Supabase 데이터베이스를 사용하여 사용자 데이터를 관리합니다. NestJS를 기반으로 구축되어 확장 가능하고, GraphQL을 통해 효율적인 데이터 요청 및 응답 구조를 지원합니다.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# 사용 기술
 
-## Description
+- NestJS: 안정적이고 확장 가능한 서버 사이드 프레임워크.
+- GraphQL: 클라이언트가 필요한 데이터만 효율적으로 요청할 수 있도록 지원하는 API 쿼리 언어.
+- Supabase Database: 실시간 기능을 제공하는 Postgres 기반의 데이터베이스 서비스.
+- Supabase OAuth2: Google, GitHub 등의 소셜 로그인을 지원하는 OAuth2 인증 시스템.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# 주요 기능
 
-## Installation
+- 사용자 로그인 및 회원가입
+- JWT 기반 인증 및 권한 부여
+- 소셜 로그인(OAuth2) 지원
+- 사용자 프로필 관리
 
-```bash
-$ npm install
-```
+# 구현 예정 기능
 
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+1. 사용자 프로필 관리  
+   기능: 사용자가 자신의 프로필을 업데이트하고, 프로필 사진을 업로드할 수 있는 기능.  
+   세부 사항: 이름, 이메일, 전화번호, 프로필 사진 업로드 등.
+2. 비밀번호 재설정/찾기  
+   기능: 사용자가 비밀번호를 잊어버렸을 때 이메일을 통해 비밀번호 재설정을 요청할 수 있는 기능.  
+   세부 사항: 이메일로 재설정 링크 전송, 토큰 기반 비밀번호 재설정 기능.
+3. 소셜 로그인  
+   기능: Google, Facebook, GitHub 등 소셜 계정을 통해 로그인할 수 있는 기능.  
+   세부 사항: OAuth2 프로토콜을 통해 Google, Facebook, GitHub 등과 연동.
+4. 이메일 인증  
+   기능: 회원가입 후 이메일 인증을 통해 계정을 활성화하는 기능.  
+   세부 사항: 회원가입 시 확인 이메일 전송, 이메일 인증 완료 시 계정 활성화.
+5. 권한 및 역할 관리 (Role-based Access Control, RBAC)  
+   기능: 관리자는 다른 사용자의 역할(일반 사용자, 관리자 등)을 설정하고, 각 역할별로 접근 권한을 다르게 설정.  
+   세부 사항: 권한에 따라 페이지 또는 기능 접근 제어.
+6. 사용자 활동 로그  
+   기능: 사용자의 로그인 및 활동 기록을 저장하여 관리자가 확인할 수 있는 기능.  
+   세부 사항: 로그인 시각, 로그아웃 시각, 비정상적인 접근 시도 기록 등.
+7. 2단계 인증 (Two-Factor Authentication, 2FA)  
+   기능: 보안을 강화하기 위해 Google Authenticator 또는 SMS를 통한 2단계 인증 기능 추가.  
+   세부 사항: 로그인 시 추가 인증 단계 제공.
+8. 사용자 알림 시스템  
+   기능: 사용자가 프로필 변경, 비밀번호 변경 등과 같은 중요한 이벤트에 대해 알림을 받는 기능.  
+   세부 사항: 이메일, SMS, 또는 앱 내 알림으로 사용자에게 전송.
+9. 계정 비활성화 및 삭제  
+   기능: 사용자가 자신의 계정을 비활성화하거나 영구적으로 삭제할 수 있는 기능.  
+   세부 사항: 계정 비활성화 시 로그인 불가, 일정 기간 후 계정 자동 삭제 등.
+10. 관리자 대시보드  
+    기능: 관리자만 접근할 수 있는 대시보드를 제공하여 사용자 목록 조회, 사용자 관리, 활동 로그 확인 등 가능.  
+    세부 사항: 관리자 권한에 따른 데이터 접근, 사용자 활동 모니터링 기능.
+11. 이메일/SMS 마케팅 관리  
+    기능: 관리자가 특정 사용자들에게 뉴스레터나 프로모션 이메일/SMS를 전송할 수 있는 기능.  
+    세부 사항: 사용자 그룹 분류, 마케팅 자료 전송 기능.
