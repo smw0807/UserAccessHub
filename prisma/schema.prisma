@@ -23,3 +23,41 @@ model TestUser {
 
   @@map("test_users")
 }
+
+// 사용자 정보
+model User {
+  id                        String        @id @default(cuid())
+  email                     String        @unique
+  name                      String?       
+  password                  String?       
+  type                      SIGN_UP_TYPE  @default(EMAIL)
+  role                      Role          @default(USER)
+  status                    Status        @default(ACTIVE)
+  lastLoginAt               DateTime?   
+  profileImage              String?  
+  phoneNumber               String?       @unique
+  emailVerified             Boolean?      @default(false) //이메일 인증 여부
+  twoFactorEnabled          Boolean       @default(false) //2단계 인증 여부
+  resetPasswordToken        String?                       //비밀번호 초기화 토큰
+  resetPasswordTokenExpires DateTime?                     //비밀번호 초기화 토큰 만료일
+  createdAt                 DateTime      @default(now())
+  updatedAt                 DateTime      @updatedAt
+
+  @@map("TB_USER")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+enum SIGN_UP_TYPE {
+  EMAIL
+  KAKAO
+  GOOGLE
+}
