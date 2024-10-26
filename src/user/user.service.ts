@@ -65,8 +65,6 @@ export class UserService {
     }
   }
 
-  // 패스워드 찾기
-
   // 회원 정보 수정
 
   // 이메일 유무 확인
