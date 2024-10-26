@@ -6,6 +6,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { SupabaseModule } from './supabase/supabase.module';
 import { GraphqlModule } from './graphql/graphql.module';
 import { UtilsModule } from './utils/utils.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UtilsModule } from './utils/utils.module';
     PrismaModule,
     SupabaseModule,
     GraphqlModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
