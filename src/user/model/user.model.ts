@@ -51,8 +51,8 @@ export class UserModel {
   resetPasswordTokenExpires?: Date;
 }
 
-@ObjectType({ description: '회원가입 결과' })
-export class SignUpResult extends ResultModel {
+@ObjectType({ description: '회원' })
+export class UserResult extends ResultModel {
   @Field(() => UserModel, { nullable: true, description: '회원 정보' })
   user?: UserModel;
 }

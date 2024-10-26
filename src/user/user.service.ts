@@ -51,6 +51,19 @@ export class UserService {
   }
 
   // 회원 정보 조회
+  async findUser(email: string): Promise<UserModel> {
+    try {
+      const user = await this.prisma.user.findFirst({
+        where: {
+          email,
+        },
+      });
+      return user;
+    } catch (e) {
+      this.logger.error(e);
+      throw new Error(e);
+    }
+  }
 
   // 패스워드 찾기
 
