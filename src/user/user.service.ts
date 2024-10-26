@@ -32,6 +32,23 @@ export class UserService {
       throw new Error(e);
     }
   }
+  // 비밀번호 확인
+  async verifyPassword(email: string, password: string): Promise<boolean> {
+    try {
+      const user = await this.prisma.user.findFirst({
+        where: {
+          email,
+        },
+        select: {
+          password: true,
+        },
+      });
+      return await this.utils.comparePassword(password, user.password);
+    } catch (e) {
+      this.logger.error(e);
+      throw new Error(e);
+    }
+  }
 
   // 회원 정보 조회
 
