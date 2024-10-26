@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from 'src/config/config.module';
+import { AuthUtils } from './auth.utils';
 
 @Module({
-  imports: [ConfigModule],
-  providers: [],
+  imports: [],
+  providers: [AuthUtils],
+  exports: [AuthUtils],
 })
 export class UtilsModule {}
