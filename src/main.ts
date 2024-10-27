@@ -9,6 +9,13 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
 
+  const corsConfig = configService.get('cors');
+  app.enableCors({
+    origin: corsConfig.origin,
+    methods: corsConfig.methods,
+    allowedHeaders: corsConfig.allowedHeaders,
+  });
+
   const commonConfig = configService.get('common');
 
   const port = +commonConfig.appPort;
