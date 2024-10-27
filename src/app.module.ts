@@ -7,6 +7,7 @@ import { SupabaseModule } from './supabase/supabase.module';
 import { GraphqlModule } from './graphql/graphql.module';
 import { UtilsModule } from './utils/utils.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UserModule } from './user/user.module';
     SupabaseModule,
     GraphqlModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
