@@ -54,7 +54,7 @@ export class UserResolver {
   @Query(() => UserResult, { nullable: true, description: '회원 정보 조회' })
   async findUserByEmail(@Args('email') email: string): Promise<UserResult> {
     try {
-      const result = await this.userService.findUser(email);
+      const result = await this.userService.findUserByEmail(email);
       return {
         success: result ? true : false,
         message: result ? '회원 정보 조회 성공' : '회원 정보 조회 실패',

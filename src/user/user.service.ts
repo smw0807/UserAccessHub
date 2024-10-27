@@ -52,7 +52,7 @@ export class UserService {
   }
 
   // 회원 정보 조회
-  async findUser(email: string): Promise<UserModel> {
+  async findUserByEmail(email: string): Promise<UserModel> {
     try {
       const user = await this.prisma.user.findFirst({
         where: {
