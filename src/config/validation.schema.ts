@@ -7,6 +7,10 @@ export const validationSchema = Joi.object({
   PROJECT_NAME: Joi.string().required(),
   APP_PORT: Joi.number().default(3000),
 
+  // AUTH
+  BCRYPT_SALT: Joi.string().required(),
+  JWT_SECRET: Joi.string().required(),
+
   // CORS
   CORS_ORIGIN: Joi.string().required(),
   CORS_METHODS: Joi.string().required(),
