@@ -26,6 +26,7 @@ export class UserService {
           password: await this.utils.hashPassword(input.password),
         },
       });
+      this.logger.log(`회원 가입 성공: ${user.email}`);
       return user;
     } catch (e) {
       this.logger.error(e);
