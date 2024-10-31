@@ -19,4 +19,9 @@ export const validationSchema = Joi.object({
   // SUPABASE
   SUPABASE_URL: Joi.string().required(),
   SUPABASE_API_KEY: Joi.string().required(),
+
+  // GOOGLE
+  GOOGLE_CLIENT_ID: Joi.string().required(),
+  GOOGLE_CLIENT_SECRET: Joi.string().required(),
+  GOOGLE_REDIRECT_URI: Joi.string().required(),
 });
