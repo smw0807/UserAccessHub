@@ -20,9 +20,9 @@ export class AuthGoogleService {
     ];
   }
 
-  async getGoogleAuthUrl(): Promise<string> {
+  getGoogleAuthUrl(): string {
     try {
-      const url = await this.oauth2Client.generateAuthUrl({
+      const url = this.oauth2Client.generateAuthUrl({
         access_type: 'offline',
         scope: this.scopes,
       });
