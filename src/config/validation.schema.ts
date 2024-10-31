@@ -19,13 +19,4 @@ export const validationSchema = Joi.object({
   // SUPABASE
   SUPABASE_URL: Joi.string().required(),
   SUPABASE_API_KEY: Joi.string().required(),
-
-  // FIREBASE
-  FIREBASE_PROJECT_ID: Joi.string().required(),
-  FIREBASE_WEB_API_KEY: Joi.string().required(),
-  FIREBASE_CLIENT_EMAIL: Joi.string().required(),
-  FIREBASE_AUTH_DOMAIN: Joi.string().required(),
-  FIREBASE_STORAGE_BUCKET: Joi.string().required(),
-  FIREBASE_MESSAGING_SENDER_ID: Joi.string().required(),
-  FIREBASE_APP_ID: Joi.string().required(),
 });
