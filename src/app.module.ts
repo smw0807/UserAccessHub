@@ -8,7 +8,6 @@ import { GraphqlModule } from './graphql/graphql.module';
 import { UtilsModule } from './utils/utils.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { FirebaseModule } from './firebase/firebase.module';
 
 @Module({
   imports: [
@@ -19,7 +18,6 @@ import { FirebaseModule } from './firebase/firebase.module';
     GraphqlModule,
     UserModule,
     AuthModule,
-    FirebaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
