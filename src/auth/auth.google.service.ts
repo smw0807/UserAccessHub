@@ -20,14 +20,28 @@ export class AuthGoogleService {
     ];
   }
 
+  // 구글 로그인 URL 생성
   getGoogleAuthUrl(): string {
+    const url = this.oauth2Client.generateAuthUrl({
+      access_type: 'offline',
+      scope: this.scopes,
+    });
+    this.logger.log(`Generated Google auth URL: ${url}`);
+    return url;
+  }
+
+  // 구글 로그인 유저 정보 조회
+  async getGoogleUser(code: string) {
     try {
-      const url = this.oauth2Client.generateAuthUrl({
-        access_type: 'offline',
-        scope: this.scopes,
+      const { tokens } = await this.oauth2Client.getToken(code);
+      const oauth2 = google.oauth2({
+        auth: this.oauth2Client,
+        version: 'v2',
       });
-      this.logger.log(`Generated Google auth URL: ${url}`);
-      return url;
+      this.oauth2Client.setCredentials({ access_token: tokens.access_token });
+      const { data } = await oauth2.userinfo.get();
+
+      return data;
     } catch (e) {
       this.logger.error(e);
       throw new Error(e);
