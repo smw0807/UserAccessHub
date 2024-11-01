@@ -36,7 +36,7 @@ export class AuthResolver {
       }
       // 토큰 발급
       const { accessToken, refreshToken } =
-        await this.authService.emailSignInToken(user);
+        await this.authService.makeTokens(user);
       return {
         success: true,
         message: '이메일 로그인 성공',

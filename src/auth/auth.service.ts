@@ -8,7 +8,7 @@ export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
   // 이메일 로그인 토큰 발급
-  async emailSignInToken(user: UserModel) {
+  async makeTokens(user: UserModel) {
     try {
       console.log('emailLogin : ', user);
       const payload = {
@@ -17,6 +17,7 @@ export class AuthService {
         name: user.name,
         role: user.role,
         type: user.type,
+        profileImage: user.profileImage,
       };
       const accessToken = this.jwtService.sign(payload);
       const refreshToken = this.jwtService.sign(payload, {
