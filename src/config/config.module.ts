@@ -6,7 +6,7 @@ import corsConfig from './conf/cors.config';
 import supabaseConfig from './conf/supabase.config';
 import authConfig from './conf/auth.config';
 import googleConfig from './conf/google.config';
-
+import kakaoConfig from './conf/kakao.config';
 @Module({
   imports: [
     NestConfigModule.forRoot({
@@ -17,6 +17,7 @@ import googleConfig from './conf/google.config';
         supabaseConfig,
         authConfig,
         googleConfig,
+        kakaoConfig,
       ],
       isGlobal: true,
       validationSchema,
