@@ -12,6 +12,7 @@ import { Request, Response } from 'express';
 import { AuthGoogleService } from './auth.google.service';
 import { UserService } from 'src/user/user.service';
 import { SIGN_UP_TYPE } from '@prisma/client';
+import { AuthKakaoService } from './auth.kakao.service';
 
 @Controller('auth')
 export class AuthController {
@@ -20,6 +21,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly authGoogleService: AuthGoogleService,
     private readonly userService: UserService,
+    private readonly authKakaoService: AuthKakaoService,
   ) {}
 
   @Get('signin/google')
@@ -62,7 +64,13 @@ export class AuthController {
 
   @Get('signin/kakao')
   async signinKakao(@Req() req: Request, @Res() res: Response) {
-    return res.status(200).send('kakao');
+    try {
+      const url = this.authKakaoService.getKakaoAuthUrl();
+      return res.status(200).send(url);
+    } catch (e) {
+      this.logger.error(e);
+      return res.status(500).send(e.message);
+    }
   }
 
   @Get('callback/:provider')
