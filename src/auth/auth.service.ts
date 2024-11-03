@@ -25,13 +25,15 @@ export class AuthService {
         payload['refresh_token'] = tokens.refresh_token;
         payload['token_type'] = tokens.token_type;
       }
+      const expiryDate = tokens?.expiry_date ?? '7d';
       const accessToken = this.jwtService.sign(payload);
       const refreshToken = this.jwtService.sign(payload, {
-        expiresIn: tokens?.expiry_date ?? '7d',
+        expiresIn: expiryDate,
       });
       return {
         access_token: accessToken,
         refresh_token: refreshToken,
+        expiry_date: expiryDate,
       };
     } catch (e) {
       this.logger.error(e);
