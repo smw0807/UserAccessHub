@@ -41,8 +41,8 @@ export class AuthResolver {
         success: true,
         message: '이메일 로그인 성공',
         token: {
-          accessToken: access_token,
-          refreshToken: refresh_token,
+          access_token: access_token,
+          refresh_token: refresh_token,
         },
       };
     } catch (e) {

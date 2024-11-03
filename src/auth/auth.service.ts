@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserModel } from 'src/user/model/user.model';
-import { TokenInfoType } from './types/auth.type';
+import { TokenInfo } from './models/auth.model';
 
 @Injectable()
 export class AuthService {
@@ -9,7 +9,7 @@ export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
   // 로그인 토큰 발급
-  async makeTokens(user: UserModel, tokens?: TokenInfoType) {
+  async makeTokens(user: UserModel, tokens?: TokenInfo) {
     try {
       console.log('emailLogin : ', user);
       const payload = {
