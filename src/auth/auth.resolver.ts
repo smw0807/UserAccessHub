@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { EmailSignInResult } from './models/auth.model';
 import { UserService } from 'src/user/user.service';
@@ -52,5 +52,15 @@ export class AuthResolver {
         message: e.message,
       };
     }
+  }
+
+  @UseGuards()
+  @Query(() => String, {
+    nullable: true,
+    description: '토큰 검증',
+  })
+  async verifyToken() {
+    // console.log('auth : ', auth);
+    return 'test';
   }
 }

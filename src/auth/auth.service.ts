@@ -40,4 +40,23 @@ export class AuthService {
       throw new Error(e);
     }
   }
+  // 토큰 검증
+  async verifyToken(token: string) {
+    return this.jwtService.verify(token);
+  }
+
+  // 토큰 만료 여부 확인
+  async isTokenExpired(token: string) {
+    return this.jwtService.verify(token);
+  }
+
+  // 토큰 갱신
+  async refreshToken(token: string) {
+    return this.jwtService.sign(token);
+  }
+
+  // 토큰 파싱
+  async parseToken(token: string) {
+    return this.jwtService.decode(token);
+  }
 }
