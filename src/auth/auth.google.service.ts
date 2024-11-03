@@ -30,20 +30,29 @@ export class AuthGoogleService {
     return url;
   }
 
-  // 구글 로그인 유저 정보 조회
-  async getGoogleUser(code: string) {
+  // 구글 로그인 인증 토큰 발급
+  async getGoogleAuthToken(code: string) {
     try {
       const { tokens } = await this.oauth2Client.getToken(code);
+      return tokens;
+    } catch (e) {
+      this.logger.error('getGoogleUser', e);
+      throw new Error(e);
+    }
+  }
+
+  // 구글 로그인 유저 정보 조회
+  async getGoogleUser(accessToken: string) {
+    try {
       const oauth2 = google.oauth2({
         auth: this.oauth2Client,
         version: 'v2',
       });
-      this.oauth2Client.setCredentials({ access_token: tokens.access_token });
+      this.oauth2Client.setCredentials({ access_token: accessToken });
       const { data } = await oauth2.userinfo.get();
-
       return data;
     } catch (e) {
-      this.logger.error(e);
+      this.logger.error('getGoogleUser', e);
       throw new Error(e);
     }
   }
