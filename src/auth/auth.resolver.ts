@@ -35,14 +35,14 @@ export class AuthResolver {
         throw new Error('비밀번호가 일치하지 않습니다.');
       }
       // 토큰 발급
-      const { accessToken, refreshToken } =
+      const { access_token, refresh_token } =
         await this.authService.makeTokens(user);
       return {
         success: true,
         message: '이메일 로그인 성공',
         token: {
-          accessToken,
-          refreshToken,
+          accessToken: access_token,
+          refreshToken: refresh_token,
         },
       };
     } catch (e) {
