@@ -26,6 +26,7 @@ export const validationSchema = Joi.object({
   GOOGLE_REDIRECT_URI: Joi.string().required(),
 
   // KAKAO
+  KAKAO_API_URL: Joi.string().required(),
   KAKAO_REST_API_KEY: Joi.string().required(),
   KAKAO_REDIRECT_URI: Joi.string().required(),
 });
