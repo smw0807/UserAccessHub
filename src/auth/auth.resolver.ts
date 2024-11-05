@@ -3,6 +3,9 @@ import { Args, Query, Resolver } from '@nestjs/graphql';
 import { EmailSignInResult } from './models/auth.model';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
+import { AuthGuard } from './guard/auth.guard';
+import { CurrentUser } from './decorator/current.user';
+import { ResultModel } from 'src/common/result.model';
 
 @Resolver()
 export class AuthResolver {
@@ -54,13 +57,37 @@ export class AuthResolver {
     }
   }
 
-  @UseGuards()
-  @Query(() => String, {
+  @UseGuards(AuthGuard)
+  @Query(() => ResultModel, { description: 'ADMIN 유저 여부 체크' })
+  async checkAdminUser(@CurrentUser() user: any) {
+    if (user.role === 'ADMIN') {
+      return {
+        success: true,
+        message: 'ADMIN 유저입니다.',
+      };
+    }
+    return {
+      success: false,
+      message: 'ADMIN 유저가 아닙니다.',
+    };
+  }
+
+  @UseGuards(AuthGuard)
+  @Query(() => ResultModel, {
     nullable: true,
     description: '토큰 검증',
   })
-  async verifyToken() {
-    // console.log('auth : ', auth);
-    return 'test';
+  async verifyToken(@CurrentUser() user: any) {
+    console.log('user: ', user);
+    if (user) {
+      return {
+        success: true,
+        message: '토큰 검증 성공',
+      };
+    }
+    return {
+      success: false,
+      message: '토큰 검증 실패',
+    };
   }
 }
