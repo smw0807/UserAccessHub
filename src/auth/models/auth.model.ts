@@ -26,7 +26,7 @@ export class EmailSignInResult extends ResultModel {
 }
 
 @ObjectType({ description: '토큰 사용자 정보' })
-export class UserToken extends ResultModel {
+export class TokenUser extends ResultModel {
   @Field(() => String, { description: '이메일' })
   email: string;
 

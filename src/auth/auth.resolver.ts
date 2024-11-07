@@ -1,6 +1,6 @@
 import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { EmailSignInResult, UserToken } from './models/auth.model';
+import { EmailSignInResult, TokenUser } from './models/auth.model';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './guard/auth.guard';
@@ -59,7 +59,7 @@ export class AuthResolver {
 
   @UseGuards(AuthGuard)
   @Query(() => ResultModel, { description: 'ADMIN 유저 여부 체크' })
-  async checkAdminUser(@CurrentUser() user: UserToken) {
+  async checkAdminUser(@CurrentUser() user: TokenUser) {
     if (user.role === 'ADMIN') {
       return {
         success: true,
@@ -77,7 +77,7 @@ export class AuthResolver {
     nullable: true,
     description: '토큰 검증',
   })
-  async verifyToken(@CurrentUser() user: UserToken) {
+  async verifyToken(@CurrentUser() user: TokenUser) {
     console.log('user: ', user);
     if (user) {
       return {
