@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { UserModule } from 'src/user/user.module';
@@ -12,7 +12,7 @@ import { ConfigModule } from 'src/config/config.module';
 
 @Module({
   imports: [
-    UserModule,
+    forwardRef(() => UserModule),
     PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET, // 환경 변수에 설정된 JWT 비밀 키 사용
@@ -23,6 +23,6 @@ import { ConfigModule } from 'src/config/config.module';
   ],
   providers: [AuthService, AuthResolver, AuthGoogleService, AuthKakaoService],
   controllers: [AuthController],
-  exports: [],
+  exports: [AuthService],
 })
 export class AuthModule {}
