@@ -16,7 +16,7 @@ export class AuthController {
     private readonly authKakaoService: AuthKakaoService,
   ) {}
 
-  @Get('signin/google')
+  @Get('signin/google') // 구글 로그인 페이지 이동
   async signinGoogle(@Req() req: Request, @Res() res: Response) {
     try {
       const url = this.authGoogleService.getGoogleAuthUrl();
@@ -27,7 +27,7 @@ export class AuthController {
     }
   }
 
-  @Get('callback/google')
+  @Get('callback/google') // 구글 로그인 콜백
   async callbackGoogle(@Query('code') code: string, @Res() res: Response) {
     try {
       // 구글 로그인 인증 토큰 발급
@@ -71,7 +71,7 @@ export class AuthController {
     }
   }
 
-  @Get('signin/kakao')
+  @Get('signin/kakao') // 카카오 로그인 페이지 이동
   async signinKakao(@Req() req: Request, @Res() res: Response) {
     try {
       const url = this.authKakaoService.getKakaoAuthUrl();
@@ -82,7 +82,7 @@ export class AuthController {
     }
   }
 
-  @Get('callback/kakao')
+  @Get('callback/kakao') // 카카오 로그인 콜백
   async callbackKakao(@Query('code') code: string, @Res() res: Response) {
     try {
       // 카카오 로그인 인증 토큰 발급
