@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { AuthGoogleService } from './auth.google.service';
 import { UserService } from 'src/user/user.service';
-import { SIGN_UP_TYPE } from '@prisma/client';
+import { SIGN_UP_TYPE, Status } from '@prisma/client';
 import { AuthKakaoService } from './auth.kakao.service';
 
 @Controller('auth')
@@ -49,6 +49,11 @@ export class AuthController {
         });
         this.logger.log(`소셜 로그인 회원 가입 성공: ${socialUser.email}`);
         user = await this.userService.findUserByEmail(userData.email);
+      }
+      if (user.status === Status.INACTIVE) {
+        return res
+          .status(400)
+          .send('현재 비활성화된 회원입니다.\n관리자에게 문의해주세요.');
       }
       // 토큰 생성
       const tokenInfo = await this.authService.makeTokens(user, {
@@ -103,6 +108,11 @@ export class AuthController {
         user = await this.userService.findUserByEmail(
           userData.kakao_account.email,
         );
+      }
+      if (user.status === Status.INACTIVE) {
+        return res
+          .status(400)
+          .send('현재 비활성화된 회원입니다.\n관리자에게 문의해주세요.');
       }
       // 토큰 생성
       const tokenInfo = await this.authService.makeTokens(user, tokens);

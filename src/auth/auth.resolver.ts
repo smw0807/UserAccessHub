@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from './guard/auth.guard';
 import { CurrentUser } from './decorator/current.user';
 import { ResultModel } from 'src/common/result.model';
+import { Status } from '@prisma/client';
 
 @Resolver()
 export class AuthResolver {
@@ -28,6 +29,11 @@ export class AuthResolver {
       const user = await this.userService.findUserByEmail(email);
       if (!user) {
         throw new Error('가입되지 않은 이메일입니다.');
+      }
+      if (user.status === Status.INACTIVE) {
+        throw new Error(
+          '현재 비활성화된 회원입니다.\n관리자에게 문의해주세요.',
+        );
       }
       // 비밀번호 확인
       const isPasswordValid = await this.userService.verifyPassword(
