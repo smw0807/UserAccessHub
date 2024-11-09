@@ -1,9 +1,12 @@
-import { Logger } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { SignUpInput } from './input/signup.input';
 import { UserResult } from './model/user.model';
 import { ResultModel } from 'src/common/result.model';
+import { AuthGuard } from 'src/auth/guard/auth.guard';
+import { CurrentUser } from 'src/auth/decorator/current.user';
+import { TokenUser } from 'src/auth/models/auth.model';
 
 @Resolver()
 export class UserResolver {
@@ -51,10 +54,11 @@ export class UserResolver {
   }
 
   // 회원 정보 조회
+  @UseGuards(AuthGuard)
   @Query(() => UserResult, { nullable: true, description: '회원 정보 조회' })
-  async findUserByEmail(@Args('email') email: string): Promise<UserResult> {
+  async findUserByEmail(@CurrentUser() user: TokenUser): Promise<UserResult> {
     try {
-      const result = await this.userService.findUserByEmail(email);
+      const result = await this.userService.findUserByEmail(user.email);
       return {
         success: result ? true : false,
         message: result ? '회원 정보 조회 성공' : '회원 정보 조회 실패',
