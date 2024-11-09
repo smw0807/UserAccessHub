@@ -49,6 +49,12 @@ export class UserModel {
     description: '비밀번호 재설정 토큰 만료 시간',
   })
   resetPasswordTokenExpires?: Date;
+
+  @Field({ nullable: true, description: '회원 생성 시간' })
+  createdAt?: Date;
+
+  @Field({ nullable: true, description: '회원 수정 시간' })
+  updatedAt?: Date;
 }
 
 @ObjectType({ description: '회원' })
