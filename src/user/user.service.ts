@@ -55,6 +55,14 @@ export class UserService {
     }
   }
 
+  // 마지막 로그인 시간 업데이트
+  async updateLastLogin(email: string) {
+    await this.prisma.user.update({
+      where: { email },
+      data: { lastLoginAt: new Date() },
+    });
+  }
+
   // 비밀번호 확인
   async verifyPassword(email: string, password: string): Promise<boolean> {
     try {

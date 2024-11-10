@@ -55,6 +55,8 @@ export class AuthController {
           .status(400)
           .send('현재 비활성화된 회원입니다.\n관리자에게 문의해주세요.');
       }
+      // 마지막 로그인 시간 업데이트
+      await this.userService.updateLastLogin(user.email);
       // 토큰 생성
       const tokenInfo = await this.authService.makeTokens(user, {
         access_token: tokens.access_token,
@@ -109,6 +111,8 @@ export class AuthController {
           userData.kakao_account.email,
         );
       }
+      // 마지막 로그인 시간 업데이트
+      await this.userService.updateLastLogin(user.email);
       if (user.status === Status.INACTIVE) {
         return res
           .status(400)

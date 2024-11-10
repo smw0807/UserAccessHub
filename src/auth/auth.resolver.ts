@@ -43,6 +43,8 @@ export class AuthResolver {
       if (!isPasswordValid) {
         throw new Error('비밀번호가 일치하지 않습니다.');
       }
+      // 마지막 로그인 시간 업데이트
+      await this.userService.updateLastLogin(email);
       // 토큰 발급
       const { access_token, refresh_token } =
         await this.authService.makeTokens(user);
