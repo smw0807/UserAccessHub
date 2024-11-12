@@ -72,4 +72,47 @@ export class UserResolver {
       };
     }
   }
+
+  // 회원 휴대폰 번호 저장
+  @UseGuards(AuthGuard)
+  @Mutation(() => ResultModel, {
+    nullable: true,
+    description: '회원 휴대폰 번호 저장',
+  })
+  async savePhoneNumber(
+    @CurrentUser() user: TokenUser,
+    @Args('phoneNumber') phoneNumber: string,
+  ) {
+    try {
+      // 휴대폰 번호 등록된게 있는지 확인
+      const isPhoneNumberExist =
+        await this.userService.findPhoneNumberByPhoneNumber(phoneNumber);
+      if (isPhoneNumberExist) {
+        return {
+          success: false,
+          message: '이미 등록된 휴대폰 번호입니다.',
+        };
+      }
+      const result = await this.userService.savePhoneNumber(
+        user.email,
+        phoneNumber,
+      );
+      if (result) {
+        return {
+          success: true,
+          message: '휴대폰 번호 등록 성공',
+        };
+      }
+      return {
+        success: false,
+        message: '휴대폰 번호 등록 실패',
+      };
+    } catch (e) {
+      this.logger.error(e);
+      return {
+        success: false,
+        message: e.message,
+      };
+    }
+  }
 }

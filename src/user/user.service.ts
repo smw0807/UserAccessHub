@@ -96,7 +96,21 @@ export class UserService {
     }
   }
 
-  // 회원 정보 수정
+  // 회원 휴대폰 번호 저장
+  async savePhoneNumber(email: string, phoneNumber: string) {
+    return await this.prisma.user.update({
+      where: { email },
+      data: { phoneNumber },
+    });
+  }
+
+  // 회원 휴대폰 번호 조회
+  async findPhoneNumberByPhoneNumber(phoneNumber: string): Promise<string> {
+    const user = await this.prisma.user.findFirst({
+      where: { phoneNumber },
+    });
+    return user.phoneNumber;
+  }
 
   // 이메일 유무 확인
   async isEmailExist(email: string): Promise<boolean> {
