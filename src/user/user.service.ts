@@ -109,7 +109,7 @@ export class UserService {
     const user = await this.prisma.user.findFirst({
       where: { phoneNumber },
     });
-    return user.phoneNumber;
+    return user?.phoneNumber ?? null;
   }
 
   // 이메일 유무 확인
