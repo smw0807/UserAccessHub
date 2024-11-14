@@ -2,11 +2,13 @@ import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { SignUpInput } from './input/signup.input';
-import { UserResult } from './model/user.model';
+import { UserListResult, UserResult } from './model/user.model';
 import { ResultModel } from 'src/common/result.model';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { CurrentUser } from 'src/auth/decorator/current.user';
 import { TokenUser } from 'src/auth/models/auth.model';
+import { Role } from '@prisma/client';
+import { UserSearchInput } from './input/search.input';
 
 @Resolver()
 export class UserResolver {
@@ -106,6 +108,39 @@ export class UserResolver {
       return {
         success: false,
         message: '휴대폰 번호 등록 실패',
+      };
+    } catch (e) {
+      this.logger.error(e);
+      return {
+        success: false,
+        message: e.message,
+      };
+    }
+  }
+
+  // 회원 목록 조회
+  @UseGuards(AuthGuard)
+  @Query(() => UserListResult, {
+    nullable: true,
+    description: '회원 목록 조회',
+  })
+  async findAllUser(
+    @CurrentUser() user: TokenUser,
+    @Args('filter') filter: UserSearchInput,
+  ) {
+    try {
+      if (user.role !== Role.ADMIN) {
+        return {
+          success: false,
+          message: '권한이 없습니다.',
+        };
+      }
+      const result = await this.userService.findAllUser(filter);
+      return {
+        success: true,
+        message: '회원 목록 조회 성공',
+        totalCount: result.totalCount,
+        users: result.users,
       };
     } catch (e) {
       this.logger.error(e);

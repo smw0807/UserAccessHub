@@ -1,4 +1,4 @@
-import { ObjectType } from '@nestjs/graphql';
+import { Int, ObjectType } from '@nestjs/graphql';
 import { Role, SIGN_UP_TYPE, Status } from '@prisma/client';
 import { Field } from '@nestjs/graphql';
 import { ResultModel } from 'src/common/result.model';
@@ -61,4 +61,13 @@ export class UserModel {
 export class UserResult extends ResultModel {
   @Field(() => UserModel, { nullable: true, description: '회원 정보' })
   user?: UserModel;
+}
+
+@ObjectType({ description: '회원 목록' })
+export class UserListResult extends ResultModel {
+  @Field(() => Int, { nullable: true, description: '총 회원수' })
+  totalCount?: number;
+
+  @Field(() => [UserModel], { nullable: true, description: '회원 목록' })
+  users?: UserModel[];
 }

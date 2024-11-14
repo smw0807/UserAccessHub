@@ -4,6 +4,7 @@ import { SignUpInput, SocialSignUpInput } from './input/signup.input';
 import { UserModel } from './model/user.model';
 import { AuthUtils } from 'src/utils/auth.utils';
 import { SIGN_UP_TYPE } from '@prisma/client';
+import { UserSearchInput } from './input/search.input';
 
 @Injectable()
 export class UserService {
@@ -94,6 +95,23 @@ export class UserService {
       this.logger.error(e);
       throw new Error(e);
     }
+  }
+
+  // 회원 목록 조회
+  async findAllUser(filter: UserSearchInput) {
+    const totalCount = await this.prisma.user.count({
+      where: {
+        email: filter.email,
+      },
+    });
+    const users = await this.prisma.user.findMany({
+      where: {
+        email: filter.email,
+      },
+      skip: filter.pageIndex * filter.pageSize,
+      take: filter.pageSize,
+    });
+    return { totalCount, users };
   }
 
   // 회원 휴대폰 번호 저장
