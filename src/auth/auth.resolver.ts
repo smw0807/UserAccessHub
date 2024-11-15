@@ -1,12 +1,13 @@
 import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { EmailSignInResult, TokenUser } from './models/auth.model';
+import { TokenResult, TokenUser } from './models/auth.model';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './guard/auth.guard';
 import { CurrentUser } from './decorator/current.user';
 import { ResultModel } from 'src/common/result.model';
 import { Status } from '@prisma/client';
+import { TokenInput } from './input/auth.input';
 
 @Resolver()
 export class AuthResolver {
@@ -16,14 +17,14 @@ export class AuthResolver {
     private readonly authService: AuthService,
   ) {}
 
-  @Query(() => EmailSignInResult, {
+  @Query(() => TokenResult, {
     nullable: true,
     description: '이메일 로그인',
   })
   async emailSignIn(
     @Args('email') email: string,
     @Args('password') password: string,
-  ): Promise<EmailSignInResult> {
+  ): Promise<TokenResult> {
     try {
       // 회원 정보 확인
       const user = await this.userService.findUserByEmail(email);
@@ -97,5 +98,41 @@ export class AuthResolver {
       success: false,
       message: '토큰 검증 실패',
     };
+  }
+
+  @Query(() => TokenResult, {
+    nullable: true,
+    description: '토큰 갱신',
+  })
+  async refreshToken(@Args('token') token: TokenInput): Promise<TokenResult> {
+    try {
+      console.log('token: ', token);
+      // 토큰 검증
+      const verifyResult = await this.authService.verifyToken(
+        token.refresh_token,
+      );
+      if (!verifyResult) {
+        throw new Error('토큰 검증 실패');
+      }
+      const userInfo = await this.userService.findUserByEmail(
+        verifyResult.email,
+      );
+      const { access_token, refresh_token } =
+        await this.authService.makeTokens(userInfo);
+      return {
+        success: true,
+        message: '토큰 갱신 성공',
+        token: {
+          access_token: access_token,
+          refresh_token: refresh_token,
+        },
+      };
+    } catch (e) {
+      this.logger.error(e);
+      return {
+        success: false,
+        message: e.message,
+      };
+    }
   }
 }

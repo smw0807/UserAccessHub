@@ -19,9 +19,9 @@ export class TokenInfo extends Token {
   expiry_date: number | string;
 }
 
-@ObjectType({ description: '이메일 로그인 결과' })
-export class EmailSignInResult extends ResultModel {
-  @Field(() => Token, { nullable: true, description: ' 토큰' })
+@ObjectType({ description: '토큰 발급 결과' })
+export class TokenResult extends ResultModel {
+  @Field(() => Token, { nullable: true, description: '토큰' })
   token?: Token;
 }
 
