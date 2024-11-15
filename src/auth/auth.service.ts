@@ -44,9 +44,4 @@ export class AuthService {
   async verifyToken(token: string) {
     return this.jwtService.verify(token);
   }
-
-  // 토큰 갱신
-  async refreshToken(token: string) {
-    return this.jwtService.sign(token);
-  }
 }
