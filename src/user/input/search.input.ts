@@ -8,6 +8,6 @@ export class UserSearchInput {
   @Field(() => Int, { nullable: true, description: '페이지 인덱스' })
   pageIndex?: number;
 
-  @Field(() => String, { nullable: true, description: '이메일' })
-  email?: string;
+  @Field(() => String, { nullable: true, description: '검색어' })
+  keyword?: string;
 }

@@ -101,12 +101,18 @@ export class UserService {
   async findAllUser(filter: UserSearchInput) {
     const totalCount = await this.prisma.user.count({
       where: {
-        email: filter.email,
+        OR: [
+          { email: { contains: filter.keyword } },
+          { name: { contains: filter.keyword } },
+        ],
       },
     });
     const users = await this.prisma.user.findMany({
       where: {
-        email: filter.email,
+        OR: [
+          { email: { contains: filter.keyword } },
+          { name: { contains: filter.keyword } },
+        ],
       },
       skip: filter.pageIndex * filter.pageSize,
       take: filter.pageSize,
