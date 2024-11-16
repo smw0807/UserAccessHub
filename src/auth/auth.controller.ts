@@ -1,4 +1,4 @@
-import { Controller, Get, Logger, Query, Req, Res } from '@nestjs/common';
+import { Controller, Get, Logger, Post, Query, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { AuthGoogleService } from './auth.google.service';
@@ -15,6 +15,46 @@ export class AuthController {
     private readonly userService: UserService,
     private readonly authKakaoService: AuthKakaoService,
   ) {}
+
+  // 토큰 검증 (토큰 헤더에 담겨있어야함)
+  @Post('verify/token')
+  async verifyToken(@Req() req: Request, @Res() res: Response) {
+    try {
+      // access token 검증
+      const decoded = await this.authService.verifyToken(
+        req.headers.authorization,
+      );
+      if (!decoded) {
+        return res.status(401).send('유효하지 않은 토큰입니다.');
+      }
+      return res.status(200).send(decoded);
+    } catch (e) {
+      this.logger.error(e);
+      return res.status(500).send(e.message);
+    }
+  }
+
+  // 토큰 재발급(토큰 헤더에 담겨있어야함)
+  @Post('refresh/token')
+  async refreshToken(@Req() req: Request, @Res() res: Response) {
+    try {
+      const decoded = await this.authService.verifyToken(
+        req.headers.authorization,
+      );
+      if (!decoded) {
+        return res.status(401).send('유효하지 않은 토큰입니다.');
+      }
+      const user = await this.userService.findUserByEmail(decoded.email);
+      if (!user) {
+        return res.status(401).send('유효하지 않은 회원입니다.');
+      }
+      const tokenInfo = await this.authService.makeTokens(user);
+      return res.status(200).send(tokenInfo);
+    } catch (e) {
+      this.logger.error(e);
+      return res.status(500).send(e.message);
+    }
+  }
 
   @Get('signin/google') // 구글 로그인 페이지 이동
   async signinGoogle(@Req() req: Request, @Res() res: Response) {
