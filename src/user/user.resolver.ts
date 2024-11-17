@@ -124,7 +124,7 @@ export class UserResolver {
     nullable: true,
     description: '회원 목록 조회',
   })
-  async findAllUser(
+  async findAllUsers(
     @CurrentUser() user: TokenUser,
     @Args('filter') filter: UserSearchInput,
   ) {
