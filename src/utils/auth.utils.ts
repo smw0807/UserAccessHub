@@ -20,7 +20,6 @@ export class AuthUtils {
     password: string,
     hashedPassword: string,
   ): Promise<boolean> {
-    console.log(this.configService.get('auth.bcryptSalt'));
     return await bcrypt.compare(
       password + this.configService.get('auth.bcryptSalt'),
       hashedPassword,
