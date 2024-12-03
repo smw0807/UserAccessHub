@@ -53,6 +53,13 @@ export class AuthController {
       message: '비밀번호가 일치하지 않습니다.',
     });
   }
+  // 유효하지 않은 토큰 결과
+  private getInvalidTokenResult(res: Response) {
+    return res.status(401).send({
+      success: false,
+      message: '유효하지 않은 토큰입니다.',
+    });
+  }
 
   // 이메일 로그인
   @Post('login')
@@ -87,16 +94,11 @@ export class AuthController {
       await this.userService.updateLastLogin(email);
 
       // 토큰 발급
-      const { access_token, refresh_token, expiry_date } =
-        await this.authService.makeTokens(user);
+      const tokenInfo = await this.authService.makeTokens(user);
       return res.status(200).send({
         success: true,
         message: '이메일 로그인 성공',
-        token: {
-          access_token,
-          refresh_token,
-          expiry_date,
-        },
+        token: tokenInfo,
       });
     } catch (e) {
       this.logger.error(e);
@@ -113,9 +115,13 @@ export class AuthController {
         req.headers.authorization,
       );
       if (!decoded) {
-        return res.status(401).send('유효하지 않은 토큰입니다.');
+        return this.getInvalidTokenResult(res);
       }
-      return res.status(200).send(decoded);
+      return res.status(200).send({
+        success: true,
+        message: '토큰 검증 성공',
+        data: decoded,
+      });
     } catch (e) {
       this.logger.error(e);
       return res.status(500).send(e.message);
@@ -130,14 +136,18 @@ export class AuthController {
         req.headers.authorization,
       );
       if (!decoded) {
-        return res.status(401).send('유효하지 않은 토큰입니다.');
+        return this.getInvalidTokenResult(res);
       }
       const user = await this.userService.findUserByEmail(decoded.email);
       if (!user) {
-        return res.status(401).send('유효하지 않은 회원입니다.');
+        return this.getNoEmailResult(res);
       }
       const tokenInfo = await this.authService.makeTokens(user);
-      return res.status(200).send(tokenInfo);
+      return res.status(200).send({
+        success: true,
+        message: '토큰 재발급 성공',
+        token: tokenInfo,
+      });
     } catch (e) {
       this.logger.error(e);
       return res.status(500).send(e.message);
