@@ -6,7 +6,7 @@ import { Request, Response } from 'express';
 import { AuthUtils } from 'src/utils/auth.utils';
 import { AuthGoogleService } from './auth.google.service';
 
-@Controller('auth')
+@Controller('auth/google')
 export class AuthGoogleController {
   private readonly logger = new Logger(AuthGoogleController.name);
   constructor(
@@ -16,7 +16,7 @@ export class AuthGoogleController {
     private readonly authUtils: AuthUtils,
   ) {}
 
-  @Get('signin/google') // 구글 로그인 페이지 이동
+  @Get('signin') // 구글 로그인 페이지 이동
   async signinGoogle(@Req() req: Request, @Res() res: Response) {
     try {
       const url = this.authGoogleService.getGoogleAuthUrl();
@@ -27,7 +27,7 @@ export class AuthGoogleController {
     }
   }
 
-  @Get('callback/google') // 구글 로그인 콜백
+  @Get('callback') // 구글 로그인 콜백
   async callbackGoogle(@Query('code') code: string, @Res() res: Response) {
     try {
       // 구글 로그인 인증 토큰 발급

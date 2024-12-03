@@ -6,7 +6,7 @@ import { SIGN_UP_TYPE, Status } from '@prisma/client';
 import { Request, Response } from 'express';
 import { AuthUtils } from 'src/utils/auth.utils';
 
-@Controller('auth')
+@Controller('auth/kakao')
 export class AuthKakaoController {
   private readonly logger = new Logger(AuthKakaoController.name);
   constructor(
@@ -16,7 +16,7 @@ export class AuthKakaoController {
     private readonly authUtils: AuthUtils,
   ) {}
 
-  @Get('signin/kakao') // 카카오 로그인 페이지 이동
+  @Get('signin') // 카카오 로그인 페이지 이동
   async signinKakao(@Req() req: Request, @Res() res: Response) {
     try {
       const url = this.authKakaoService.getKakaoAuthUrl();
@@ -27,7 +27,7 @@ export class AuthKakaoController {
     }
   }
 
-  @Get('callback/kakao') // 카카오 로그인 콜백
+  @Get('callback') // 카카오 로그인 콜백
   async callbackKakao(@Query('code') code: string, @Res() res: Response) {
     try {
       // 카카오 로그인 인증 토큰 발급
