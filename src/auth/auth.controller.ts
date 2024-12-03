@@ -1,4 +1,13 @@
-import { Controller, Get, Logger, Post, Query, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Post,
+  Query,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { AuthGoogleService } from './auth.google.service';
@@ -15,6 +24,85 @@ export class AuthController {
     private readonly userService: UserService,
     private readonly authKakaoService: AuthKakaoService,
   ) {}
+
+  // 이메일, 패스워드 없음 결과
+  private getNoEmailPasswordResult(res: Response) {
+    return res.status(400).send({
+      success: false,
+      message: '이메일 또는 패스워드가 없습니다.',
+    });
+  }
+  // 이메일 없음 결과
+  private getNoEmailResult(res: Response) {
+    return res.status(404).send({
+      success: false,
+      message: '가입되지 않은 이메일입니다.',
+    });
+  }
+  // 비활성화 회원 결과
+  private getInactiveUserResult(res: Response) {
+    return res.status(403).send({
+      success: false,
+      message: '현재 비활성화된 회원입니다.\n관리자에게 문의해주세요.',
+    });
+  }
+  // 비밀번호 불일치 결과
+  private getPasswordNotMatchResult(res: Response) {
+    return res.status(401).send({
+      success: false,
+      message: '비밀번호가 일치하지 않습니다.',
+    });
+  }
+
+  // 이메일 로그인
+  @Post('login')
+  async signinEmail(
+    @Body() body: { email: string; password: string },
+    @Res() res: Response,
+  ) {
+    try {
+      const { email, password } = body;
+      if (!email || !password) {
+        return this.getNoEmailPasswordResult(res);
+      }
+      // 회원 정보 확인
+      const user = await this.userService.findUserByEmail(email);
+      if (!user) {
+        return this.getNoEmailResult(res);
+      }
+      if (user.status === Status.INACTIVE) {
+        return this.getInactiveUserResult(res);
+      }
+
+      // 비밀번호 확인
+      const isPasswordValid = await this.userService.verifyPassword(
+        email,
+        password,
+      );
+      if (!isPasswordValid) {
+        return this.getPasswordNotMatchResult(res);
+      }
+
+      // 마지막 로그인 시간 업데이트
+      await this.userService.updateLastLogin(email);
+
+      // 토큰 발급
+      const { access_token, refresh_token, expiry_date } =
+        await this.authService.makeTokens(user);
+      return res.status(200).send({
+        success: true,
+        message: '이메일 로그인 성공',
+        token: {
+          access_token,
+          refresh_token,
+          expiry_date,
+        },
+      });
+    } catch (e) {
+      this.logger.error(e);
+      return res.status(500).send(e.message);
+    }
+  }
 
   // 토큰 검증 (토큰 헤더에 담겨있어야함)
   @Post('verify/token')
@@ -91,9 +179,7 @@ export class AuthController {
         user = await this.userService.findUserByEmail(userData.email);
       }
       if (user.status === Status.INACTIVE) {
-        return res
-          .status(400)
-          .send('현재 비활성화된 회원입니다.\n관리자에게 문의해주세요.');
+        return this.getInactiveUserResult(res);
       }
       // 마지막 로그인 시간 업데이트
       await this.userService.updateLastLogin(user.email);
@@ -107,7 +193,6 @@ export class AuthController {
 
       return res.status(200).send(tokenInfo);
     } catch (e) {
-      console.log('test : ', e.message);
       this.logger.error(e);
       return res.status(500).send(e.message);
     }
@@ -154,9 +239,7 @@ export class AuthController {
       // 마지막 로그인 시간 업데이트
       await this.userService.updateLastLogin(user.email);
       if (user.status === Status.INACTIVE) {
-        return res
-          .status(400)
-          .send('현재 비활성화된 회원입니다.\n관리자에게 문의해주세요.');
+        return this.getInactiveUserResult(res);
       }
       // 토큰 생성
       const tokenInfo = await this.authService.makeTokens(user, tokens);
