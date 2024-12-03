@@ -8,10 +8,14 @@ export class AuthService {
   private readonly logger = new Logger(AuthService.name);
   constructor(private readonly jwtService: JwtService) {}
 
-  // 로그인 토큰 발급
+  /**
+   * 로그인 토큰 발급
+   * @param user
+   * @param tokens
+   * @returns
+   */
   async makeTokens(user: UserModel, tokens?: TokenInfo) {
     try {
-      console.log('emailLogin : ', user);
       const payload = {
         email: user.email,
         id: user.id,
@@ -40,7 +44,11 @@ export class AuthService {
       throw new Error(e);
     }
   }
-  // 토큰 검증
+  /**
+   * 토큰 검증
+   * @param token
+   * @returns
+   */
   async verifyToken(token: string) {
     return this.jwtService.verify(token);
   }

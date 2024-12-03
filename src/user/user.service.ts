@@ -14,7 +14,11 @@ export class UserService {
     private readonly utils: AuthUtils,
   ) {}
 
-  // 회원 가입
+  /**
+   * 회원 가입
+   * @param input
+   * @returns
+   */
   async signUp(input: SignUpInput): Promise<UserModel> {
     try {
       const isEmailExist = await this.isEmailExist(input.email);
@@ -36,7 +40,11 @@ export class UserService {
     }
   }
 
-  // 소셜 로그인 회원 추가
+  /**
+   * 소셜 로그인 회원 추가
+   * @param input
+   * @returns
+   */
   async addSocialUser(input: SocialSignUpInput): Promise<UserModel> {
     try {
       const user = await this.prisma.user.create({
@@ -56,7 +64,10 @@ export class UserService {
     }
   }
 
-  // 마지막 로그인 시간 업데이트
+  /**
+   * 마지막 로그인 시간 업데이트
+   * @param email
+   */
   async updateLastLogin(email: string) {
     await this.prisma.user.update({
       where: { email },
@@ -64,7 +75,12 @@ export class UserService {
     });
   }
 
-  // 비밀번호 확인
+  /**
+   * 비밀번호 확인
+   * @param email
+   * @param password
+   * @returns
+   */
   async verifyPassword(email: string, password: string): Promise<boolean> {
     try {
       const user = await this.prisma.user.findFirst({
@@ -82,7 +98,11 @@ export class UserService {
     }
   }
 
-  // 회원 정보 조회
+  /**
+   * 회원 정보 조회
+   * @param email
+   * @returns
+   */
   async findUserByEmail(email: string): Promise<UserModel> {
     try {
       const user = await this.prisma.user.findFirst({
@@ -97,7 +117,11 @@ export class UserService {
     }
   }
 
-  // 회원 목록 조회
+  /**
+   * 회원 목록 조회
+   * @param filter
+   * @returns
+   */
   async findAllUser(filter: UserSearchInput) {
     const totalCount = await this.prisma.user.count({
       where: {
@@ -120,7 +144,12 @@ export class UserService {
     return { totalCount, users };
   }
 
-  // 회원 휴대폰 번호 저장
+  /**
+   * 회원 휴대폰 번호 저장
+   * @param email
+   * @param phoneNumber
+   * @returns
+   */
   async savePhoneNumber(email: string, phoneNumber: string) {
     return await this.prisma.user.update({
       where: { email },
@@ -128,7 +157,11 @@ export class UserService {
     });
   }
 
-  // 회원 휴대폰 번호 조회
+  /**
+   * 회원 휴대폰 번호 조회
+   * @param phoneNumber
+   * @returns
+   */
   async findPhoneNumberByPhoneNumber(phoneNumber: string): Promise<string> {
     const user = await this.prisma.user.findFirst({
       where: { phoneNumber },
@@ -136,7 +169,11 @@ export class UserService {
     return user?.phoneNumber ?? null;
   }
 
-  // 이메일 유무 확인
+  /**
+   * 이메일 유무 확인
+   * @param email
+   * @returns
+   */
   async isEmailExist(email: string): Promise<boolean> {
     const user = await this.prisma.user.count({
       where: { email },

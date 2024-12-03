@@ -18,12 +18,19 @@ export class AuthKakaoService {
     this.redirectUri = this.configService.get('kakao.redirectUri');
   }
 
-  // 카카오 로그인 URL 생성
+  /**
+   * 카카오 로그인 URL 생성
+   * @returns
+   */
   getKakaoAuthUrl() {
     return `https://kauth.kakao.com/oauth/authorize?client_id=${this.restApiKey}&redirect_uri=${this.redirectUri}&response_type=code&state=kakao`;
   }
 
-  // 카카오 로그인 인증 토큰 발급
+  /**
+   * 카카오 로그인 인증 토큰 발급
+   * @param code
+   * @returns
+   */
   async getKakaoAuthToken(code: string): Promise<TokenInfo> {
     try {
       const url = 'https://kauth.kakao.com/oauth/token';
@@ -45,7 +52,12 @@ export class AuthKakaoService {
     }
   }
 
-  // 카카오 사용자 정보 조회
+  /**
+   * 카카오 사용자 정보 조회
+   * @param accessToken
+   * @param tokenType
+   * @returns
+   */
   async getKakaoUser(accessToken: string, tokenType: string) {
     try {
       const url = `${this.apiUrl}/user/me`;

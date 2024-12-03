@@ -20,7 +20,10 @@ export class AuthGoogleService {
     ];
   }
 
-  // 구글 로그인 URL 생성
+  /**
+   * 구글 로그인 URL 생성
+   * @returns
+   */
   getGoogleAuthUrl(): string {
     const url = this.oauth2Client.generateAuthUrl({
       access_type: 'offline',
@@ -30,7 +33,11 @@ export class AuthGoogleService {
     return url;
   }
 
-  // 구글 로그인 인증 토큰 발급
+  /**
+   * 구글 로그인 인증 토큰 발급
+   * @param code
+   * @returns
+   */
   async getGoogleAuthToken(code: string): Promise<Credentials> {
     try {
       const { tokens } = await this.oauth2Client.getToken(code);
@@ -41,7 +48,11 @@ export class AuthGoogleService {
     }
   }
 
-  // 구글 로그인 유저 정보 조회
+  /**
+   * 구글 로그인 유저 정보 조회
+   * @param accessToken
+   * @returns
+   */
   async getGoogleUser(accessToken: string) {
     try {
       const oauth2 = google.oauth2({

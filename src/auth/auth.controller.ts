@@ -25,35 +25,55 @@ export class AuthController {
     private readonly authKakaoService: AuthKakaoService,
   ) {}
 
-  // 이메일, 패스워드 없음 결과
+  /**
+   * [400] 이메일, 패스워드 없음
+   * @param res
+   * @returns
+   */
   private getNoEmailPasswordResult(res: Response) {
     return res.status(400).send({
       success: false,
       message: '이메일 또는 패스워드가 없습니다.',
     });
   }
-  // 이메일 없음 결과
+  /**
+   * [404] 이메일 없음
+   * @param res
+   * @returns
+   */
   private getNoEmailResult(res: Response) {
     return res.status(404).send({
       success: false,
       message: '가입되지 않은 이메일입니다.',
     });
   }
-  // 비활성화 회원 결과
+  /**
+   * [403] 비활성화 회원
+   * @param res
+   * @returns
+   */
   private getInactiveUserResult(res: Response) {
     return res.status(403).send({
       success: false,
       message: '현재 비활성화된 회원입니다.\n관리자에게 문의해주세요.',
     });
   }
-  // 비밀번호 불일치 결과
+  /**
+   * [401] 비밀번호 불일치
+   * @param res
+   * @returns
+   */
   private getPasswordNotMatchResult(res: Response) {
     return res.status(401).send({
       success: false,
       message: '비밀번호가 일치하지 않습니다.',
     });
   }
-  // 유효하지 않은 토큰 결과
+  /**
+   * [401] 유효하지 않은 토큰
+   * @param res
+   * @returns
+   */
   private getInvalidTokenResult(res: Response) {
     return res.status(401).send({
       success: false,
