@@ -9,6 +9,7 @@ import { AuthGoogleService } from './auth.google.service';
 import { AuthKakaoService } from './auth.kakao.service';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from 'src/config/config.module';
+import { UtilsModule } from 'src/utils/utils.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ConfigModule } from 'src/config/config.module';
     }),
     HttpModule,
     ConfigModule,
+    UtilsModule,
   ],
   providers: [AuthService, AuthResolver, AuthGoogleService, AuthKakaoService],
   controllers: [AuthController],
