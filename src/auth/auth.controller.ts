@@ -33,6 +33,9 @@ export class AuthController {
       if (user.status === Status.INACTIVE) {
         return this.authUtils.getInactiveUserResult(res);
       }
+      if (user.password === null) {
+        return this.authUtils.isSocialUserResult(res);
+      }
 
       // 비밀번호 확인
       const isPasswordValid = await this.userService.verifyPassword(

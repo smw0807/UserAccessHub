@@ -69,6 +69,19 @@ export class AuthUtils {
       message: '현재 비활성화된 회원입니다.\n관리자에게 문의해주세요.',
     });
   }
+
+  /**
+   * [403] 소셜 로그인 회원
+   * @param res
+   * @returns
+   */
+  isSocialUserResult(res: Response) {
+    return res.status(403).send({
+      success: false,
+      message: '소셜 로그인 회원입니다.',
+    });
+  }
+
   /**
    * [401] 비밀번호 불일치
    * @param res
@@ -77,7 +90,7 @@ export class AuthUtils {
   getPasswordNotMatchResult(res: Response) {
     return res.status(401).send({
       success: false,
-      message: '비밀번호가 일치하지 않습니다.',
+      message: '이메일 또는 패스워드를 확인해주세요.',
     });
   }
   /**
