@@ -58,9 +58,14 @@ export class UserResolver {
   // 회원 정보 조회
   @UseGuards(AuthGuard)
   @Query(() => UserResult, { nullable: true, description: '회원 정보 조회' })
-  async findUserByEmail(@CurrentUser() user: TokenUser): Promise<UserResult> {
+  async findUserByEmail(
+    @CurrentUser() user: TokenUser,
+    @Args('email', { nullable: true }) email?: string,
+  ): Promise<UserResult> {
     try {
-      const result = await this.userService.findUserByEmail(user.email);
+      const result = await this.userService.findUserByEmail(
+        email ? email : user.email,
+      );
       return {
         success: result ? true : false,
         message: result ? '회원 정보 조회 성공' : '회원 정보 조회 실패',
