@@ -138,7 +138,7 @@ export class UserService {
           { name: { contains: filter.keyword } },
         ],
       },
-      skip: filter.pageIndex * filter.pageSize,
+      skip: (filter.pageIndex - 1) * filter.pageSize,
       take: filter.pageSize,
     });
     return { totalCount, users };
