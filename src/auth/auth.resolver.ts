@@ -106,7 +106,6 @@ export class AuthResolver {
   })
   async refreshToken(@Args('token') token: TokenInput): Promise<TokenResult> {
     try {
-      console.log('token: ', token);
       // 토큰 검증
       const verifyResult = await this.authService.verifyToken(
         token.refresh_token,
