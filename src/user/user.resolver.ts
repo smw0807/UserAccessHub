@@ -89,6 +89,7 @@ export class UserResolver {
   async savePhoneNumber(
     @CurrentUser() user: TokenUser,
     @Args('phoneNumber') phoneNumber: string,
+    @Args('email', { nullable: true }) email?: string,
   ) {
     try {
       // 휴대폰 번호 등록된게 있는지 확인
@@ -101,7 +102,7 @@ export class UserResolver {
         };
       }
       const result = await this.userService.savePhoneNumber(
-        user.email,
+        email ? email : user.email,
         phoneNumber,
       );
       if (result) {
