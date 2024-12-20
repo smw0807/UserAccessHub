@@ -3,7 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { SignUpInput, SocialSignUpInput } from './input/signup.input';
 import { UserModel } from './model/user.model';
 import { AuthUtils } from 'src/utils/auth.utils';
-import { SIGN_UP_TYPE, Status } from '@prisma/client';
+import { Role, SIGN_UP_TYPE, Status } from '@prisma/client';
 import { UserSearchInput } from './input/search.input';
 
 @Injectable()
@@ -183,10 +183,13 @@ export class UserService {
 
   /**
    * 회원 상태 변경
+   * @param email
+   * @param status
+   * @returns
    */
-  async updateUserStatus(email: string, status: string) {
+  async updateUserStatus(email: string, status: string): Promise<UserModel> {
     // 이메일 유무 확인
-    if (this.isEmailExist(email)) {
+    if (!this.isEmailExist(email)) {
       throw new Error('이메일이 존재하지 않습니다.');
     }
     // 상태 변경
@@ -199,6 +202,30 @@ export class UserService {
       return result;
     }
     this.logger.error(`회원 상태 변경 실패: ${email} -> ${status}`);
+    return null;
+  }
+
+  /**
+   * 회원 권한 변경
+   * @param email
+   * @param role
+   * @returns
+   */
+  async updateUserRole(email: string, role: string): Promise<UserModel> {
+    // 이메일 유무 확인
+    if (!this.isEmailExist(email)) {
+      throw new Error('이메일이 존재하지 않습니다.');
+    }
+    // 권한 변경
+    const result = await this.prisma.user.update({
+      where: { email },
+      data: { role: Role[role] },
+    });
+    if (result) {
+      this.logger.log(`회원 권한 변경 성공: ${email} -> ${role}`);
+      return result;
+    }
+    this.logger.error(`회원 권한 변경 실패: ${email} -> ${role}`);
     return null;
   }
 }
