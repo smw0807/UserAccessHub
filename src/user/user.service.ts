@@ -3,7 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { SignUpInput, SocialSignUpInput } from './input/signup.input';
 import { UserModel } from './model/user.model';
 import { AuthUtils } from 'src/utils/auth.utils';
-import { SIGN_UP_TYPE } from '@prisma/client';
+import { SIGN_UP_TYPE, Status } from '@prisma/client';
 import { UserSearchInput } from './input/search.input';
 
 @Injectable()
@@ -179,5 +179,26 @@ export class UserService {
       where: { email },
     });
     return user > 0;
+  }
+
+  /**
+   * 회원 상태 변경
+   */
+  async updateUserStatus(email: string, status: string) {
+    // 이메일 유무 확인
+    if (this.isEmailExist(email)) {
+      throw new Error('이메일이 존재하지 않습니다.');
+    }
+    // 상태 변경
+    const result = await this.prisma.user.update({
+      where: { email },
+      data: { status: Status[status] },
+    });
+    if (result) {
+      this.logger.log(`회원 상태 변경 성공: ${email} -> ${status}`);
+      return result;
+    }
+    this.logger.error(`회원 상태 변경 실패: ${email} -> ${status}`);
+    return null;
   }
 }
