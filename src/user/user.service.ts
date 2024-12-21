@@ -187,7 +187,7 @@ export class UserService {
    * @param status
    * @returns
    */
-  async updateUserStatus(email: string, status: string): Promise<UserModel> {
+  async updateUserStatus(email: string, status: string): Promise<boolean> {
     // 이메일 유무 확인
     if (!this.isEmailExist(email)) {
       throw new Error('이메일이 존재하지 않습니다.');
@@ -199,10 +199,10 @@ export class UserService {
     });
     if (result) {
       this.logger.log(`회원 상태 변경 성공: ${email} -> ${status}`);
-      return result;
+      return true;
     }
     this.logger.error(`회원 상태 변경 실패: ${email} -> ${status}`);
-    return null;
+    return false;
   }
 
   /**

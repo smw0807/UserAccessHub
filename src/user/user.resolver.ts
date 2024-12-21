@@ -156,4 +156,32 @@ export class UserResolver {
       };
     }
   }
+
+  // 회원 상태 변경
+  @UseGuards(AuthGuard)
+  @Mutation(() => ResultModel, { description: '회원 상태 변경' })
+  async updateUserStatus(
+    @Args('email') email: string,
+    @Args('status') status: string,
+  ) {
+    try {
+      const result = await this.userService.updateUserStatus(email, status);
+      if (result) {
+        return {
+          success: true,
+          message: '회원 상태 변경 성공',
+        };
+      }
+      return {
+        success: false,
+        message: '회원 상태 변경 실패',
+      };
+    } catch (e) {
+      this.logger.error(e);
+      return {
+        success: false,
+        message: e.message,
+      };
+    }
+  }
 }
