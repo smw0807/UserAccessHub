@@ -184,4 +184,32 @@ export class UserResolver {
       };
     }
   }
+
+  // 회원 권한 변경
+  @UseGuards(AuthGuard)
+  @Mutation(() => ResultModel, { description: '회원 권한 변경' })
+  async updateUserRole(
+    @Args('email') email: string,
+    @Args('role') role: string,
+  ) {
+    try {
+      const result = await this.userService.updateUserRole(email, role);
+      if (result) {
+        return {
+          success: true,
+          message: '회원 권한 변경 성공',
+        };
+      }
+      return {
+        success: false,
+        message: '회원 권한 변경 실패',
+      };
+    } catch (e) {
+      this.logger.error(e);
+      return {
+        success: false,
+        message: e.message,
+      };
+    }
+  }
 }
