@@ -43,6 +43,11 @@ model User {
   createdAt                 DateTime      @default(now())
   updatedAt                 DateTime      @updatedAt
 
+  // 적립금 정보 1:1
+  point Point?
+  // 적립금 히스토리 1:N
+  pointHistory PointHistory[]
+
   @@map("TB_USER")
 }
 
@@ -60,4 +65,38 @@ enum SIGN_UP_TYPE {
   EMAIL
   KAKAO
   GOOGLE
+}
+
+// 적립금 정보
+model Point {
+  id String @id @default(cuid())
+  userId String @unique
+  point Int @default(0)
+  reason String? // 적립 이유
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 사용자 id 1:1
+  user User @relation(fields: [userId], references: [id])
+  // 적립금 히스토리 1:N
+  pointHistory PointHistory[]
+  
+  @@map("TB_POINT")
+}
+
+// 적립금 히스토리
+model PointHistory {
+  id String @id @default(cuid())
+  userId String
+  point Int
+  reason String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 적립금 id 1:1
+  pointId Point @relation(fields: [id], references: [id])
+  // 사용자 id N:1
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("TB_POINT_HISTORY")
 }
