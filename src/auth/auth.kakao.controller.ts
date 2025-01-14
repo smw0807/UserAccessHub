@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { SIGN_UP_TYPE, Status } from '@prisma/client';
 import { Request, Response } from 'express';
 import { AuthUtils } from 'src/utils/auth.utils';
+import { PointService } from 'src/point/point.service';
 
 @Controller('auth/kakao')
 export class AuthKakaoController {
@@ -14,6 +15,7 @@ export class AuthKakaoController {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly authUtils: AuthUtils,
+    private readonly pointService: PointService,
   ) {}
 
   @Get('signin') // 카카오 로그인 페이지 이동
@@ -55,6 +57,8 @@ export class AuthKakaoController {
       }
       // 마지막 로그인 시간 업데이트
       await this.userService.updateLastLogin(user.email);
+      // 적립금 생성
+      await this.pointService.createPoint(user.id, 5, '카카오 로그인');
       if (user.status === Status.INACTIVE) {
         return this.authUtils.getInactiveUserResult(res);
       }

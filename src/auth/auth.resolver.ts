@@ -8,6 +8,7 @@ import { CurrentUser } from './decorator/current.user';
 import { ResultModel } from 'src/common/result.model';
 import { Status } from '@prisma/client';
 import { TokenInput } from './input/auth.input';
+import { PointService } from 'src/point/point.service';
 
 @Resolver()
 export class AuthResolver {
@@ -15,6 +16,7 @@ export class AuthResolver {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
+    private readonly pointService: PointService,
   ) {}
 
   @Query(() => TokenResult, {
@@ -46,6 +48,8 @@ export class AuthResolver {
       }
       // 마지막 로그인 시간 업데이트
       await this.userService.updateLastLogin(email);
+      // 적립금 생성
+      await this.pointService.createPoint(user.id, 5, '이메일 로그인');
       // 토큰 발급
       const { access_token, refresh_token } =
         await this.authService.makeTokens(user);

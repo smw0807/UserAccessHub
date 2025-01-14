@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import { UserService } from 'src/user/user.service';
 import { Status } from '@prisma/client';
 import { AuthUtils } from 'src/utils/auth.utils';
+import { PointService } from 'src/point/point.service';
 
 @Controller('auth')
 export class AuthController {
@@ -12,6 +13,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly authUtils: AuthUtils,
+    private readonly pointService: PointService,
   ) {}
 
   // 이메일 로그인
@@ -48,7 +50,8 @@ export class AuthController {
 
       // 마지막 로그인 시간 업데이트
       await this.userService.updateLastLogin(email);
-
+      // 적립금 생성
+      await this.pointService.createPoint(user.id, 5, '이메일 로그인');
       // 토큰 발급
       const tokenInfo = await this.authService.makeTokens(user);
       return res.status(200).send({

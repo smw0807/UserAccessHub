@@ -5,6 +5,7 @@ import { SIGN_UP_TYPE, Status } from '@prisma/client';
 import { Request, Response } from 'express';
 import { AuthUtils } from 'src/utils/auth.utils';
 import { AuthGoogleService } from './auth.google.service';
+import { PointService } from 'src/point/point.service';
 
 @Controller('auth/google')
 export class AuthGoogleController {
@@ -14,6 +15,7 @@ export class AuthGoogleController {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly authUtils: AuthUtils,
+    private readonly pointService: PointService,
   ) {}
 
   @Get('signin') // 구글 로그인 페이지 이동
@@ -54,6 +56,8 @@ export class AuthGoogleController {
       }
       // 마지막 로그인 시간 업데이트
       await this.userService.updateLastLogin(user.email);
+      // 적립금 생성
+      await this.pointService.createPoint(user.id, 5, '구글 로그인');
       // 토큰 생성
       const tokenInfo = await this.authService.makeTokens(user, {
         access_token: tokens.access_token,

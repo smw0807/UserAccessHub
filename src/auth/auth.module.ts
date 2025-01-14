@@ -12,6 +12,7 @@ import { ConfigModule } from 'src/config/config.module';
 import { UtilsModule } from 'src/utils/utils.module';
 import { AuthGoogleController } from './auth.google.controller';
 import { AuthKakaoController } from './auth.kakao.controller';
+import { PointModule } from 'src/point/point.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AuthKakaoController } from './auth.kakao.controller';
     HttpModule,
     ConfigModule,
     UtilsModule,
+    PointModule,
   ],
   providers: [AuthService, AuthResolver, AuthGoogleService, AuthKakaoService],
   controllers: [AuthController, AuthGoogleController, AuthKakaoController],
