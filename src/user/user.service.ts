@@ -74,6 +74,7 @@ export class UserService {
       where: { email },
       data: { lastLoginAt: new Date() },
     });
+    this.logger.log(`마지막 로그인 시간 업데이트 성공: ${email}`);
   }
 
   /**
@@ -122,7 +123,7 @@ export class UserService {
           },
         },
       });
-      console.dir(user, { depth: null });
+      this.logger.log(`회원 정보 조회 성공: ${email}`);
       return user;
     } catch (e) {
       this.logger.error(e);
@@ -154,6 +155,7 @@ export class UserService {
       skip: (filter.pageIndex - 1) * filter.pageSize,
       take: filter.pageSize,
     });
+    this.logger.log(`회원 목록 조회 성공: ${filter.keyword}`);
     return { totalCount, users };
   }
 

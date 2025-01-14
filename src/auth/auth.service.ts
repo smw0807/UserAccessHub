@@ -34,6 +34,7 @@ export class AuthService {
       const refreshToken = this.jwtService.sign(payload, {
         expiresIn: expiryDate,
       });
+      this.logger.log(`${user.email} 토큰 발급 완료`);
       return {
         access_token: accessToken,
         refresh_token: refreshToken,
