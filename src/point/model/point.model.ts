@@ -21,7 +21,7 @@ export class PointModel {
     nullable: true,
     description: '적립금 히스토리',
   })
-  history?: PointHistoryModel[];
+  pointHistory?: PointHistoryModel[];
 }
 
 @ObjectType({ description: '적립금 히스토리' })

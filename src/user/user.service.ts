@@ -113,12 +113,16 @@ export class UserService {
         include: {
           point: {
             include: {
-              pointHistory: true,
+              pointHistory: {
+                orderBy: {
+                  createdAt: 'desc',
+                },
+              },
             },
           },
         },
       });
-      console.log(user);
+      console.dir(user, { depth: null });
       return user;
     } catch (e) {
       this.logger.error(e);
