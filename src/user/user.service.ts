@@ -57,6 +57,38 @@ export class UserService {
           role: 'USER',
         },
       });
+      this.logger.log(`소셜 로그인 회원 가입 성공: ${user.email}`);
+      if (user) {
+        const point = await this.prisma.point.create({
+          data: {
+            point: 10,
+            reason: '소셜 회원 가입',
+            user: {
+              connect: {
+                id: user.id,
+              },
+            },
+          },
+        });
+        this.logger.log(`적립금 생성 성공: ${point.id}`);
+        const pointHistory = await this.prisma.pointHistory.create({
+          data: {
+            point: 10,
+            reason: '소셜 회원 가입',
+            pointOrigin: {
+              connect: {
+                id: point.id,
+              },
+            },
+            user: {
+              connect: {
+                id: user.id,
+              },
+            },
+          },
+        });
+        this.logger.log(`적립금 히스토리 생성 성공: ${pointHistory.id}`);
+      }
       return user;
     } catch (e) {
       this.logger.error(e);
