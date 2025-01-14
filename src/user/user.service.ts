@@ -111,9 +111,14 @@ export class UserService {
           email,
         },
         include: {
-          point: true,
+          point: {
+            include: {
+              pointHistory: true,
+            },
+          },
         },
       });
+      console.log(user);
       return user;
     } catch (e) {
       this.logger.error(e);
