@@ -2,6 +2,7 @@ import { Int, ObjectType } from '@nestjs/graphql';
 import { Role, SIGN_UP_TYPE, Status } from '@prisma/client';
 import { Field } from '@nestjs/graphql';
 import { ResultModel } from 'src/common/result.model';
+import { PointModel } from 'src/point/model/point.model';
 
 @ObjectType({ description: '회원' })
 export class UserModel {
@@ -55,6 +56,9 @@ export class UserModel {
 
   @Field({ nullable: true, description: '회원 수정 시간' })
   updatedAt?: Date;
+
+  @Field(() => PointModel, { nullable: true, description: '적립금' })
+  point?: PointModel;
 }
 
 @ObjectType({ description: '회원' })

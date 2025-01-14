@@ -110,6 +110,9 @@ export class UserService {
         where: {
           email,
         },
+        include: {
+          point: true,
+        },
       });
       return user;
     } catch (e) {
