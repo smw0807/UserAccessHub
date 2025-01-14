@@ -43,13 +43,12 @@ export class AuthKakaoController {
       );
       if (!user) {
         // 소셜 로그인 회원 가입
-        const socialUser = await this.userService.addSocialUser({
+        await this.userService.addSocialUser({
           email: userData.kakao_account.email,
           name: userData.properties.nickname,
           type: SIGN_UP_TYPE.KAKAO,
           profileImage: userData.properties.profile_image,
         });
-        this.logger.log(`소셜 로그인 회원 가입 성공: ${socialUser.email}`);
         user = await this.userService.findUserByEmail(
           userData.kakao_account.email,
         );
