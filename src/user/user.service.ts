@@ -5,7 +5,6 @@ import { UserModel } from './model/user.model';
 import { AuthUtils } from 'src/utils/auth.utils';
 import { Role, SIGN_UP_TYPE, Status } from '@prisma/client';
 import { UserSearchInput } from './input/search.input';
-import { PointService } from 'src/point/point.service';
 
 @Injectable()
 export class UserService {
@@ -13,7 +12,6 @@ export class UserService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly utils: AuthUtils,
-    private readonly pointService: PointService,
   ) {}
 
   /**
@@ -60,9 +58,6 @@ export class UserService {
         },
       });
       this.logger.log(`소셜 로그인 회원 가입 성공: ${user.email}`);
-      if (user) {
-        await this.pointService.createPoint(user.id, 10, '소셜 회원 가입');
-      }
       return user;
     } catch (e) {
       this.logger.error(e);
