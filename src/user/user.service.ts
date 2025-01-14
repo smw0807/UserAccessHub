@@ -152,10 +152,16 @@ export class UserService {
    * @returns
    */
   async savePhoneNumber(email: string, phoneNumber: string) {
-    return await this.prisma.user.update({
+    const result = await this.prisma.user.update({
       where: { email },
       data: { phoneNumber },
     });
+    if (result) {
+      this.logger.log(`회원 휴대폰 번호 저장 성공: ${email} -> ${phoneNumber}`);
+      return result;
+    }
+    this.logger.error(`회원 휴대폰 번호 저장 실패: ${email} -> ${phoneNumber}`);
+    return null;
   }
 
   /**
