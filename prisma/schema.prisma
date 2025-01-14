@@ -88,13 +88,14 @@ model Point {
 model PointHistory {
   id String @id @default(cuid())
   userId String
+  pointId String
   point Int
   reason String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // 적립금 id 1:1
-  pointId Point @relation(fields: [id], references: [id])
+  // 적립금과 N:1
+  pointOrigin Point @relation(fields: [pointId], references: [id])
   // 사용자 id N:1
   user User @relation(fields: [userId], references: [id])
 
