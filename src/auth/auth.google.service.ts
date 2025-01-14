@@ -61,6 +61,7 @@ export class AuthGoogleService {
       });
       this.oauth2Client.setCredentials({ access_token: accessToken });
       const { data } = await oauth2.userinfo.get();
+      this.logger.log(`구글 사용자 정보 조회 성공: ${data.email}`);
       return data;
     } catch (e) {
       this.logger.error('getGoogleUser', e);

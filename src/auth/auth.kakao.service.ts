@@ -73,6 +73,9 @@ export class AuthKakaoService {
           ],
         },
       });
+      this.logger.log(
+        `카카오 사용자 정보 조회 성공: ${user.data.kakao_account.email}`,
+      );
       return user.data;
     } catch (e) {
       this.logger.error('getKakaoUser', e);
