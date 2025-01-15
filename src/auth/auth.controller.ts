@@ -23,6 +23,7 @@ export class AuthController {
     @Res() res: Response,
   ) {
     try {
+      this.logger.log(`이메일 로그인 요청: ${body.email}`);
       const { email, password } = body;
       if (!email || !password) {
         return this.authUtils.getNoEmailPasswordResult(res);
