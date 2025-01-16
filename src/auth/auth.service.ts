@@ -29,7 +29,8 @@ export class AuthService {
         payload['refresh_token'] = tokens.refresh_token;
         payload['token_type'] = tokens.token_type;
       }
-      const expiryDate = tokens?.expiry_date ?? '7d';
+      // 토큰 만료 기간 설정 (기본값 7일)
+      const expiryDate = tokens?.expiry_date ?? 1000 * 60 * 60 * 24 * 7;
       const accessToken = this.jwtService.sign(payload);
       const refreshToken = this.jwtService.sign(payload, {
         expiresIn: expiryDate,
