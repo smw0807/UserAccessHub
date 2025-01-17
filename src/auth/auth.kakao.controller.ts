@@ -22,10 +22,17 @@ export class AuthKakaoController {
   async signinKakao(@Req() req: Request, @Res() res: Response) {
     try {
       const url = this.authKakaoService.getKakaoAuthUrl();
-      return res.status(200).send(url);
+      return res.status(200).send({
+        success: true,
+        message: '카카오 로그인 페이지 이동',
+        url: url,
+      });
     } catch (e) {
       this.logger.error(e);
-      return res.status(500).send(e.message);
+      return res.status(500).send({
+        success: false,
+        message: e.message,
+      });
     }
   }
 

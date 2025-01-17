@@ -22,10 +22,17 @@ export class AuthGoogleController {
   async signinGoogle(@Req() req: Request, @Res() res: Response) {
     try {
       const url = this.authGoogleService.getGoogleAuthUrl();
-      return res.send(url);
+      return res.send({
+        success: true,
+        message: '구글 로그인 페이지 이동',
+        url: url,
+      });
     } catch (e) {
       this.logger.error(e);
-      return res.status(500).send(e.message);
+      return res.status(500).send({
+        success: false,
+        message: e.message,
+      });
     }
   }
 
