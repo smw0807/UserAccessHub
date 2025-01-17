@@ -5,6 +5,7 @@ import { UtilsModule } from 'src/utils/utils.module';
 import { UserResolver } from './user.resolver';
 import { AuthModule } from 'src/auth/auth.module';
 import { PointModule } from 'src/point/point.module';
+import { UserController } from './user.controller';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { PointModule } from 'src/point/point.module';
     PointModule,
   ],
   providers: [UserService, UserResolver],
+  controllers: [UserController],
   exports: [UserService],
 })
 export class UserModule {}
