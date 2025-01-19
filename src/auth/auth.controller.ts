@@ -84,7 +84,10 @@ export class AuthController {
       });
     } catch (e) {
       this.logger.error(e);
-      return res.status(500).send(e.message);
+      return res.status(500).send({
+        success: false,
+        message: e.message,
+      });
     }
   }
 
