@@ -137,25 +137,22 @@ export class UserService {
    * @returns
    */
   async findAllUser(filter: UserSearchInput) {
+    const pageIndex = filter.pageIndex ?? 1;
+    const pageSize = filter.pageSize ?? 10;
+    const keyword = filter.keyword ?? '';
     const totalCount = await this.prisma.user.count({
       where: {
-        OR: [
-          { email: { contains: filter.keyword } },
-          { name: { contains: filter.keyword } },
-        ],
+        OR: [{ email: { contains: keyword } }, { name: { contains: keyword } }],
       },
     });
     const users = await this.prisma.user.findMany({
       where: {
-        OR: [
-          { email: { contains: filter.keyword } },
-          { name: { contains: filter.keyword } },
-        ],
+        OR: [{ email: { contains: keyword } }, { name: { contains: keyword } }],
       },
-      skip: (filter.pageIndex - 1) * filter.pageSize,
-      take: filter.pageSize,
+      skip: (pageIndex - 1) * pageSize,
+      take: pageSize,
     });
-    this.logger.log(`회원 목록 조회 성공: ${filter.keyword}`);
+    this.logger.log(`회원 목록 조회 성공: ${keyword}`);
     return { totalCount, users };
   }
 

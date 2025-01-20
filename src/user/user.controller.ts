@@ -1,6 +1,15 @@
-import { Body, Controller, Logger, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Post,
+  Query,
+  Res,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { Response } from 'express';
+import { UserSearchInput } from './input/search.input';
 
 @Controller('user')
 export class UserController {
@@ -20,6 +29,22 @@ export class UserController {
         .json({ success: true, message: '회원가입 성공', user: result });
     } catch (e) {
       this.logger.error(`회원가입 실패: ${e}`);
+      return res.status(500).json({ success: false, message: e.message });
+    }
+  }
+
+  @Get('/')
+  async findAllUser(@Query() query: UserSearchInput, @Res() res: Response) {
+    try {
+      console.log(query);
+      const result = await this.userService.findAllUser(query);
+      return res.status(200).json({
+        success: true,
+        message: '회원 목록 조회 성공',
+        user: result,
+      });
+    } catch (e) {
+      this.logger.error(`회원 목록 조회 실패: ${e}`);
       return res.status(500).json({ success: false, message: e.message });
     }
   }
