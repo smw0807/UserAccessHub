@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Logger,
+  Param,
   Post,
   Query,
   Res,
@@ -10,6 +11,7 @@ import {
 import { UserService } from './user.service';
 import { Response } from 'express';
 import { UserSearchInput } from './input/search.input';
+import { AuthGuard } from 'src/auth/guard/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -45,6 +47,18 @@ export class UserController {
       });
     } catch (e) {
       this.logger.error(`회원 목록 조회 실패: ${e}`);
+      return res.status(500).json({ success: false, message: e.message });
+    }
+  }
+
+  @Get('/:email')
+  async findUserByEmail(@Param('email') email: string, @Res() res: Response) {
+    try {
+      const result = await this.userService.findUserByEmail(email);
+      this.logger.log(`회원 조회 성공: ${email}`);
+      return res.status(200).json({ success: true, user: result });
+    } catch (e) {
+      this.logger.error(`회원 조회 실패: ${e}`);
       return res.status(500).json({ success: false, message: e.message });
     }
   }
