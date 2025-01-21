@@ -41,7 +41,6 @@ export class UserController {
   @Get('/')
   async findAllUser(@Query() query: UserSearchInput, @Res() res: Response) {
     try {
-      console.log(query);
       const result = await this.userService.findAllUser(query);
       return res.status(200).json({
         success: true,
