@@ -3,7 +3,7 @@ import { Args, Query, Resolver } from '@nestjs/graphql';
 import { TokenResult, TokenUser } from './models/auth.model';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './guard/auth.guard';
+import { AuthGuard } from './guard/auth.gql.guard';
 import { CurrentUser } from './decorator/current.user';
 import { ResultModel } from 'src/common/result.model';
 import { Status } from '@prisma/client';
