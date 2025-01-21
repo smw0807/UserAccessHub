@@ -4,7 +4,7 @@ import { UserService } from './user.service';
 import { SignUpInput } from './input/signup.input';
 import { UserListResult, UserResult } from './model/user.model';
 import { ResultModel } from 'src/common/result.model';
-import { AuthGuard } from 'src/auth/guard/auth.gql.guard';
+import { AuthGqlGuard } from 'src/auth/guard/auth.gql.guard';
 import { CurrentUser } from 'src/auth/decorator/current.user';
 import { TokenUser } from 'src/auth/models/auth.model';
 import { Role } from '@prisma/client';
@@ -56,7 +56,7 @@ export class UserResolver {
   }
 
   // 회원 정보 조회
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGqlGuard)
   @Query(() => UserResult, { nullable: true, description: '회원 정보 조회' })
   async findUserByEmail(
     @CurrentUser() user: TokenUser,
@@ -81,7 +81,7 @@ export class UserResolver {
   }
 
   // 회원 휴대폰 번호 저장
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGqlGuard)
   @Mutation(() => ResultModel, {
     nullable: true,
     description: '회원 휴대폰 번호 저장',
@@ -125,7 +125,7 @@ export class UserResolver {
   }
 
   // 회원 목록 조회
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGqlGuard)
   @Query(() => UserListResult, {
     nullable: true,
     description: '회원 목록 조회',
@@ -158,7 +158,7 @@ export class UserResolver {
   }
 
   // 회원 상태 변경
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGqlGuard)
   @Mutation(() => ResultModel, { description: '회원 상태 변경' })
   async updateUserStatus(
     @Args('email') email: string,
@@ -186,7 +186,7 @@ export class UserResolver {
   }
 
   // 회원 권한 변경
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGqlGuard)
   @Mutation(() => ResultModel, { description: '회원 권한 변경' })
   async updateUserRole(
     @Args('email') email: string,
