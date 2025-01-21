@@ -11,7 +11,6 @@ import {
 import { UserService } from './user.service';
 import { Response } from 'express';
 import { UserSearchInput } from './input/search.input';
-import { AuthGuard } from 'src/auth/guard/auth.guard';
 
 @Controller('user')
 export class UserController {
