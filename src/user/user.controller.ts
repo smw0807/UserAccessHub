@@ -8,12 +8,10 @@ import {
   Put,
   Query,
   Res,
-  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Response } from 'express';
 import { UserSearchInput } from './input/search.input';
-import { AuthApiGuard } from 'src/auth/guard/auth.api.guard';
 import { UserUpdateInput } from './input/update.input';
 
 @Controller('user')
@@ -53,7 +51,6 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthApiGuard)
   @Get('/:email')
   async findUserByEmail(@Param('email') email: string, @Res() res: Response) {
     try {
