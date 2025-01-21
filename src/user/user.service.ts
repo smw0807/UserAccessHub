@@ -5,6 +5,7 @@ import { UserModel } from './model/user.model';
 import { AuthUtils } from 'src/utils/auth.utils';
 import { Role, SIGN_UP_TYPE, Status } from '@prisma/client';
 import { UserSearchInput } from './input/search.input';
+import { UserUpdateInput } from './input/update.input';
 
 @Injectable()
 export class UserService {
@@ -154,6 +155,21 @@ export class UserService {
     });
     this.logger.log(`회원 목록 조회 성공: ${keyword}`);
     return { totalCount, users };
+  }
+
+  /**
+   * 회원 업데이트
+   * @param email
+   * @param data
+   * @returns
+   */
+  async updateUser(email: string, data: UserUpdateInput) {
+    const result = await this.prisma.user.update({
+      where: { email },
+      data,
+    });
+    this.logger.log(`회원 업데이트 성공: ${email}`);
+    return result;
   }
 
   /**

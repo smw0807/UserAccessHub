@@ -5,12 +5,16 @@ import {
   Logger,
   Param,
   Post,
+  Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Response } from 'express';
 import { UserSearchInput } from './input/search.input';
+import { AuthApiGuard } from 'src/auth/guard/auth.api.guard';
+import { UserUpdateInput } from './input/update.input';
 
 @Controller('user')
 export class UserController {
@@ -50,6 +54,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(AuthApiGuard)
   @Get('/:email')
   async findUserByEmail(@Param('email') email: string, @Res() res: Response) {
     try {
@@ -58,6 +63,23 @@ export class UserController {
       return res.status(200).json({ success: true, user: result });
     } catch (e) {
       this.logger.error(`회원 조회 실패: ${e}`);
+      return res.status(500).json({ success: false, message: e.message });
+    }
+  }
+
+  @Put('/:email')
+  async updateUser(
+    @Param('email') email: string,
+    @Body() body: UserUpdateInput,
+    @Res() res: Response,
+  ) {
+    try {
+      this.logger.log(`회원 업데이트 요청: ${email}`);
+      const result = await this.userService.updateUser(email, body);
+      this.logger.log(`회원 업데이트 성공: ${email}`);
+      return res.status(200).json({ success: true, user: result });
+    } catch (e) {
+      this.logger.error(`회원 업데이트 실패: ${e}`);
       return res.status(500).json({ success: false, message: e.message });
     }
   }
