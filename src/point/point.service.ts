@@ -99,4 +99,46 @@ export class PointService {
     });
     this.logger.log(`적립금 히스토리 생성 성공: ${pointHistory.id}`);
   }
+
+  /**
+   * 적립금 히스토리 목록 조회
+   * @param keyword
+   * @param page
+   * @param size
+   * @returns
+   */
+  async getPointHistoryList(keyword: string, page: number, size: number) {
+    const totalCount = await this.prisma.pointHistory.count({
+      where: {
+        reason: {
+          contains: keyword,
+        },
+      },
+    });
+    if (totalCount === 0) {
+      return { pointHistoryList: [], totalCount };
+    }
+    const pointHistoryList = await this.prisma.pointHistory.findMany({
+      where: {
+        reason: {
+          contains: keyword,
+        },
+      },
+      include: {
+        pointOrigin: true,
+        user: true,
+      },
+      skip: (page - 1) * size,
+      take: size,
+    });
+
+    const result = pointHistoryList.map((pointHistory) => {
+      return {
+        ...pointHistory,
+        pointOrigin: pointHistory.pointOrigin.point,
+        user: pointHistory.user.email,
+      };
+    });
+    return { pointHistoryList: result, totalCount };
+  }
 }
