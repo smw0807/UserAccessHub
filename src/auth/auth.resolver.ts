@@ -1,6 +1,6 @@
 import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { TokenResult, TokenUser } from './models/auth.model';
+import { TokenResult, TokenUser, VerifyTokenResult } from './models/auth.model';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { AuthGqlGuard } from './guard/auth.gql.guard';
@@ -86,21 +86,22 @@ export class AuthResolver {
   }
 
   @UseGuards(AuthGqlGuard)
-  @Query(() => ResultModel, {
+  @Query(() => VerifyTokenResult, {
     nullable: true,
     description: '토큰 검증',
   })
   async verifyToken(@CurrentUser() user: TokenUser) {
-    console.log('user: ', user);
     if (user) {
       return {
         success: true,
         message: '토큰 검증 성공',
+        user: user,
       };
     }
     return {
       success: false,
       message: '토큰 검증 실패',
+      user: null,
     };
   }
 

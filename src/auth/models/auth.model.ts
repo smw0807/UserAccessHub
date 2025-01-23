@@ -1,6 +1,16 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Role, SIGN_UP_TYPE } from '@prisma/client';
 import { ResultModel } from 'src/common/result.model';
+
+registerEnumType(Role, {
+  name: 'Role',
+  description: '역할',
+});
+
+registerEnumType(SIGN_UP_TYPE, {
+  name: 'SIGN_UP_TYPE',
+  description: '가입 유형',
+});
 
 @ObjectType({ description: '토큰' })
 export class Token {
@@ -53,4 +63,10 @@ export class TokenUser extends ResultModel {
 
   @Field(() => String, { nullable: true, description: '토큰 타입' })
   token_type?: string;
+}
+
+@ObjectType({ description: '토큰 검증 결과' })
+export class VerifyTokenResult extends ResultModel {
+  @Field(() => TokenUser, { nullable: true, description: '토큰 사용자 정보' })
+  user?: TokenUser;
 }
