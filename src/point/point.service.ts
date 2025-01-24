@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PointHistorySearchInput } from './input/point.input';
 
 @Injectable()
 export class PointService {
@@ -107,7 +108,8 @@ export class PointService {
    * @param size
    * @returns
    */
-  async getPointHistoryList(keyword: string, page: number, size: number) {
+  async getPointHistoryList(input: PointHistorySearchInput) {
+    const { keyword, page, size } = input;
     const totalCount = await this.prisma.pointHistory.count({
       where: {
         reason: {
@@ -130,15 +132,19 @@ export class PointService {
       },
       skip: (page - 1) * size,
       take: size,
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     const result = pointHistoryList.map((pointHistory) => {
       return {
         ...pointHistory,
-        pointOrigin: pointHistory.pointOrigin.point,
-        user: pointHistory.user.email,
+        totalPoint: pointHistory.pointOrigin.point,
+        email: pointHistory.user.email,
       };
     });
+    console.log(result);
     return { pointHistoryList: result, totalCount };
   }
 }
