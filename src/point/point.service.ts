@@ -144,7 +144,6 @@ export class PointService {
         email: pointHistory.user.email,
       };
     });
-    console.log(result);
     return { pointHistoryList: result, totalCount };
   }
 }
