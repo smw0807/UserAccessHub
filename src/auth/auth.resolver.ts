@@ -4,7 +4,7 @@ import { TokenResult, TokenUser, VerifyTokenResult } from './models/auth.model';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { AuthGqlGuard } from './guard/auth.gql.guard';
-import { CurrentUser } from './decorator/current.user';
+import { CurrentUser } from './decorator/current.user.gql';
 import { ResultModel } from 'src/common/result.model';
 import { Status } from '@prisma/client';
 import { TokenInput } from './input/auth.input';

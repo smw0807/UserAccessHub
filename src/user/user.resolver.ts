@@ -5,7 +5,7 @@ import { SignUpInput } from './input/signup.input';
 import { UserListResult, UserResult } from './model/user.model';
 import { ResultModel } from 'src/common/result.model';
 import { AuthGqlGuard } from 'src/auth/guard/auth.gql.guard';
-import { CurrentUser } from 'src/auth/decorator/current.user';
+import { CurrentUser } from 'src/auth/decorator/current.user.gql';
 import { TokenUser } from 'src/auth/models/auth.model';
 import { Role } from '@prisma/client';
 import { UserSearchInput } from './input/search.input';
