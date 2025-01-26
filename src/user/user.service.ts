@@ -138,8 +138,8 @@ export class UserService {
    * @returns
    */
   async findAllUser(filter: UserSearchInput) {
-    const pageIndex = filter.pageIndex ?? 1;
-    const pageSize = filter.pageSize ?? 10;
+    const page = filter.page ?? 1;
+    const size = filter.size ?? 10;
     const keyword = filter.keyword ?? '';
     const totalCount = await this.prisma.user.count({
       where: {
@@ -150,8 +150,8 @@ export class UserService {
       where: {
         OR: [{ email: { contains: keyword } }, { name: { contains: keyword } }],
       },
-      skip: (pageIndex - 1) * pageSize,
-      take: pageSize,
+      skip: (page - 1) * size,
+      take: size,
     });
     this.logger.log(`회원 목록 조회 성공: ${keyword}`);
     return { totalCount, users };
