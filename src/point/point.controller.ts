@@ -1,13 +1,16 @@
-import { Controller, Get, Logger, Query, Res } from '@nestjs/common';
+import { Controller, Get, Logger, Query, Res, UseGuards } from '@nestjs/common';
 import { PointService } from './point.service';
 import { PointHistorySearchInput } from './input/point.input';
 import { Response } from 'express';
+import { AuthGuard } from 'src/auth/guard/auth.guard';
 
 @Controller('point')
 export class PointController {
   private readonly logger = new Logger(PointController.name);
   constructor(private readonly pointService: PointService) {}
 
+  // 적립금 히스토리 목록 조회
+  @UseGuards(AuthGuard)
   @Get('history')
   async getPointHistoryList(
     @Query() input: PointHistorySearchInput,
