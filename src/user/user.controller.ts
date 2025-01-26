@@ -39,7 +39,20 @@ export class UserController {
   @Get('/')
   async findAllUser(@Query() query: UserSearchInput, @Res() res: Response) {
     try {
-      const result = await this.userService.findAllUser(query);
+      const { page, size, keyword } = query;
+      let pageIndex = page ?? 1;
+      let pageSize = size ?? 10;
+      if (typeof pageIndex === 'string') {
+        pageIndex = parseInt(pageIndex);
+      }
+      if (typeof pageSize === 'string') {
+        pageSize = parseInt(pageSize);
+      }
+      const result = await this.userService.findAllUser({
+        page: pageIndex,
+        size: pageSize,
+        keyword,
+      });
       return res.status(200).json({
         success: true,
         message: '회원 목록 조회 성공',
