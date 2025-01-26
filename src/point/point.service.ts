@@ -112,9 +112,20 @@ export class PointService {
     const { keyword, page, size } = input;
     const totalCount = await this.prisma.pointHistory.count({
       where: {
-        reason: {
-          contains: keyword,
-        },
+        OR: [
+          {
+            reason: {
+              contains: keyword,
+            },
+          },
+          {
+            user: {
+              email: {
+                contains: keyword,
+              },
+            },
+          },
+        ],
       },
     });
     if (totalCount === 0) {
@@ -122,9 +133,20 @@ export class PointService {
     }
     const pointHistoryList = await this.prisma.pointHistory.findMany({
       where: {
-        reason: {
-          contains: keyword,
-        },
+        OR: [
+          {
+            reason: {
+              contains: keyword,
+            },
+          },
+          {
+            user: {
+              email: {
+                contains: keyword,
+              },
+            },
+          },
+        ],
       },
       include: {
         pointOrigin: true,
