@@ -7,7 +7,7 @@ UserAccessHub는 사용자 관리 및 인증을 위한 RESTful API와 GraphQL �
 - NestJS: 안정적이고 확장 가능한 서버 사이드 프레임워크.
 - GraphQL: 클라이언트가 필요한 데이터만 효율적으로 요청할 수 있도록 지원하는 API 쿼리 언어.
 - Supabase Database: 실시간 기능을 제공하는 Postgres 기반의 데이터베이스 서비스.
-- Supabase OAuth2: Google, GitHub 등의 소셜 로그인을 지원하는 OAuth2 인증 시스템.
+- OAuth2: Google, Kakao에서 제공하는 소셜 로그인 기능.
 
 ## 주요 기능
 
