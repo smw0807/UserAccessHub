@@ -1,6 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { SignUpInput, SocialSignUpInput } from './input/signup.input';
+import {
+  AddUserInput,
+  SignUpInput,
+  SocialSignUpInput,
+} from './input/signup.input';
 import { UserModel } from './model/user.model';
 import { AuthUtils } from 'src/utils/auth.utils';
 import { Role, SIGN_UP_TYPE, Status } from '@prisma/client';
@@ -34,6 +38,26 @@ export class UserService {
         },
       });
       this.logger.log(`회원 가입 성공: ${user.email}`);
+      return user;
+    } catch (e) {
+      this.logger.error(e);
+      throw new Error(e);
+    }
+  }
+
+  async addUser(input: AddUserInput): Promise<UserModel> {
+    try {
+      const user = await this.prisma.user.create({
+        data: {
+          email: input.email,
+          name: input.name,
+          phoneNumber: input.phoneNumber,
+          password: await this.utils.hashPassword(input.password),
+          status: input.status,
+          role: input.role,
+        },
+      });
+      this.logger.log(`회원 추가 성공: ${user.email}`);
       return user;
     } catch (e) {
       this.logger.error(e);

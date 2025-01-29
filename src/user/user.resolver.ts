@@ -1,7 +1,7 @@
 import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
-import { SignUpInput } from './input/signup.input';
+import { AddUserInput, SignUpInput } from './input/signup.input';
 import { UserListResult, UserResult } from './model/user.model';
 import { ResultModel } from 'src/common/result.model';
 import { AuthGqlGuard } from 'src/auth/guard/auth.gql.guard';
@@ -23,6 +23,40 @@ export class UserResolver {
       return {
         success: true,
         message: '회원 가입 성공',
+        user: result,
+      };
+    } catch (e) {
+      this.logger.error(e);
+      return {
+        success: false,
+        message: e.message,
+      };
+    }
+  }
+
+  // 회원 추가
+  @Mutation(() => UserResult, { nullable: true, description: '회원 추가' })
+  async addUser(@Args('input') input: AddUserInput): Promise<UserResult> {
+    try {
+      const isEmailExist = await this.userService.isEmailExist(input.email);
+      if (isEmailExist) {
+        return {
+          success: false,
+          message: '이미 가입된 이메일입니다.',
+        };
+      }
+      const isPhoneNumberExist =
+        await this.userService.findPhoneNumberByPhoneNumber(input.phoneNumber);
+      if (isPhoneNumberExist) {
+        return {
+          success: false,
+          message: '이미 등록된 휴대폰 번호입니다.',
+        };
+      }
+      const result = await this.userService.addUser(input);
+      return {
+        success: true,
+        message: '회원 추가 성공',
         user: result,
       };
     } catch (e) {
