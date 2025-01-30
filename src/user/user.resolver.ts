@@ -9,6 +9,7 @@ import { CurrentUser } from 'src/auth/decorator/current.user.gql';
 import { TokenUser } from 'src/auth/models/auth.model';
 import { Role } from '@prisma/client';
 import { UserSearchInput } from './input/search.input';
+import { AuthAdminGuard } from 'src/auth/guard/auth.admin.guard';
 
 @Resolver()
 export class UserResolver {
@@ -35,6 +36,7 @@ export class UserResolver {
   }
 
   // 회원 추가
+  @UseGuards(AuthGqlGuard, AuthAdminGuard)
   @Mutation(() => UserResult, { nullable: true, description: '회원 추가' })
   async addUser(@Args('input') input: AddUserInput): Promise<UserResult> {
     try {
