@@ -148,7 +148,6 @@ export class UserService {
           },
         },
       });
-      this.logger.log(`회원 정보 조회 성공: ${email}`);
       return user;
     } catch (e) {
       this.logger.error(e);

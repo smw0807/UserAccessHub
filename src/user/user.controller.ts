@@ -8,11 +8,15 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Response } from 'express';
 import { UserSearchInput } from './input/search.input';
 import { UserUpdateInput } from './input/update.input';
+import { AuthGuard } from 'src/auth/guard/auth.guard';
+import { CurrentUser } from 'src/auth/decorator/current.user';
+import { UserModel } from './model/user.model';
 
 @Controller('user')
 export class UserController {
@@ -60,6 +64,19 @@ export class UserController {
       });
     } catch (e) {
       this.logger.error(`회원 목록 조회 실패: ${e}`);
+      return res.status(500).json({ success: false, message: e.message });
+    }
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/myInfo')
+  async getMyInfo(@CurrentUser() user: UserModel, @Res() res: Response) {
+    try {
+      const result = await this.userService.findUserByEmail(user.email);
+      this.logger.log(`회원 정보 조회 성공: ${user.email}`);
+      return res.status(200).json({ success: true, user: result });
+    } catch (e) {
+      this.logger.error(`회원 정보 조회 실패: ${e}`);
       return res.status(500).json({ success: false, message: e.message });
     }
   }
