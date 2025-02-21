@@ -1,4 +1,4 @@
-import { Body, Controller, Logger, Post, Req, Res } from '@nestjs/common';
+import { Controller, Headers, Logger, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { UserService } from 'src/user/user.service';
@@ -19,12 +19,19 @@ export class AuthController {
   // 이메일 로그인
   @Post('login')
   async signinEmail(
-    @Body() body: { email: string; password: string },
+    @Headers('authorization') authorization: string,
     @Res() res: Response,
   ) {
     try {
-      this.logger.log(`이메일 로그인 요청: ${body.email}`);
-      const { email, password } = body;
+      const token = authorization.split(' ');
+      if (token.length !== 2) {
+        return this.authUtils.getInvalidTokenResult(res);
+      }
+      const tokenValue = token[1];
+      const decoded = Buffer.from(tokenValue, 'base64').toString('utf-8');
+      const [email, password] = decoded.split(':');
+
+      this.logger.log(`이메일 로그인 요청: ${email}`);
       if (!email || !password) {
         return this.authUtils.getNoEmailPasswordResult(res);
       }
