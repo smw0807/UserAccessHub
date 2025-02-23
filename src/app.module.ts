@@ -8,6 +8,8 @@ import { GraphqlModule } from './graphql/graphql.module';
 import { UtilsModule } from './utils/utils.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { RBACGuard } from './auth/guard/auth.rbac.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -20,6 +22,12 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: RBACGuard,
+    },
+  ],
 })
 export class AppModule {}

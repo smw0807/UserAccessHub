@@ -10,6 +10,7 @@ import { TokenUser } from 'src/auth/models/auth.model';
 import { Role } from '@prisma/client';
 import { UserSearchInput } from './input/search.input';
 import { AuthAdminGuard } from 'src/auth/guard/auth.admin.guard';
+import { RBAC } from 'src/auth/decorator/rbac.decorator';
 
 @Resolver()
 export class UserResolver {
@@ -93,6 +94,7 @@ export class UserResolver {
 
   // 회원 정보 조회
   @UseGuards(AuthGqlGuard)
+  @RBAC(Role.ADMIN)
   @Query(() => UserResult, { nullable: true, description: '회원 정보 조회' })
   async findUserByEmail(
     @CurrentUser() user: TokenUser,
