@@ -9,7 +9,8 @@ import { UtilsModule } from './utils/utils.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { RBACGuard } from './auth/guard/auth.rbac.guard';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { ResponseTimeInterceptor } from './common/interceptor/response-time';
 
 @Module({
   imports: [
@@ -27,6 +28,10 @@ import { APP_GUARD } from '@nestjs/core';
     {
       provide: APP_GUARD,
       useClass: RBACGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseTimeInterceptor,
     },
   ],
 })
