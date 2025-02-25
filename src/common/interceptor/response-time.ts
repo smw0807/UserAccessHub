@@ -14,6 +14,7 @@ export class ResponseTimeInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     let request = context.switchToHttp().getRequest();
     let body = null;
+    // GraqphQL 요청일 경우
     if (!request) {
       const ctx = GqlExecutionContext.create(context);
       request = ctx.getContext().req;
