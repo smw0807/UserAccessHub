@@ -10,6 +10,5 @@ export class GraphqlResolver {
   async helloTest() {
     this.logger.log('hello resolver');
     return 'Hello GraphQL';
-    // throw new Error('Hello GraphQL');
   }
 }
