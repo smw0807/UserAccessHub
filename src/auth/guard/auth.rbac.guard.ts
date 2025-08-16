@@ -8,7 +8,6 @@ export class RBACGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     const role = this.reflector.get<Role>('role', context.getHandler());
-    console.log('role ; ', role);
     if (!role) {
       return true;
     }
