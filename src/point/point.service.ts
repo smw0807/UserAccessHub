@@ -15,11 +15,26 @@ export class PointService {
    */
   async createPoint(userId: string, point: number, reason?: string) {
     try {
-      // userId 로 생성된 포인트 데이터가 있는지 확인 (있으면 update, 없으면 create)
-      const pointOrigin = await this.prisma.point.findFirst({
+      // 히스토리에서 오늘 날짜에 생성된 히스토리가 있는지 확인
+      const today = new Date();
+      const todayPointHistory = await this.prisma.pointHistory.findFirst({
         where: {
           userId,
+          createdAt: {
+            gte: new Date(today.setHours(0, 0, 0, 0)),
+            lte: new Date(today.setHours(23, 59, 59, 999)),
+          },
         },
+      });
+      // 이미 있으면 적립하지 않음
+      if (todayPointHistory) {
+        this.logger.log(`오늘 날짜에 이미 적립금 생성됨`);
+        return;
+      }
+
+      // userId 로 생성된 포인트 데이터가 있는지 확인 (있으면 update, 없으면 create)
+      const pointOrigin = await this.prisma.point.findFirst({
+        where: { userId },
       });
       if (pointOrigin) {
         await this.updatePoint(
@@ -33,11 +48,7 @@ export class PointService {
           data: {
             point: point,
             reason: reason,
-            user: {
-              connect: {
-                id: userId,
-              },
-            },
+            user: { connect: { id: userId } },
           },
         });
         this.logger.log(`적립금 생성 성공: ${pointOrigin.id}`);
@@ -86,16 +97,8 @@ export class PointService {
       data: {
         point: point,
         reason: reason,
-        pointOrigin: {
-          connect: {
-            id: pointOriginId,
-          },
-        },
-        user: {
-          connect: {
-            id: userId,
-          },
-        },
+        pointOrigin: { connect: { id: pointOriginId } },
+        user: { connect: { id: userId } },
       },
     });
     this.logger.log(`적립금 히스토리 생성 성공: ${pointHistory.id}`);
@@ -113,18 +116,8 @@ export class PointService {
     const totalCount = await this.prisma.pointHistory.count({
       where: {
         OR: [
-          {
-            reason: {
-              contains: keyword,
-            },
-          },
-          {
-            user: {
-              email: {
-                contains: keyword,
-              },
-            },
-          },
+          { reason: { contains: keyword } },
+          { user: { email: { contains: keyword } } },
         ],
       },
     });
@@ -134,29 +127,14 @@ export class PointService {
     const pointHistoryList = await this.prisma.pointHistory.findMany({
       where: {
         OR: [
-          {
-            reason: {
-              contains: keyword,
-            },
-          },
-          {
-            user: {
-              email: {
-                contains: keyword,
-              },
-            },
-          },
+          { reason: { contains: keyword } },
+          { user: { email: { contains: keyword } } },
         ],
       },
-      include: {
-        pointOrigin: true,
-        user: true,
-      },
+      include: { pointOrigin: true, user: true },
       skip: (page - 1) * size,
       take: size,
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: { createdAt: 'desc' },
     });
 
     const result = pointHistoryList.map((pointHistory) => {
