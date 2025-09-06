@@ -17,9 +17,6 @@ import { UserUpdateInput } from './input/update.input';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { CurrentUser } from 'src/auth/decorator/current.user';
 import { UserModel } from './model/user.model';
-import { RBAC } from 'src/auth/decorator/rbac.decorator';
-import { Role } from '@prisma/client';
-import { RBACGuard } from 'src/auth/guard/auth.rbac.guard';
 
 @Controller('user')
 export class UserController {
@@ -84,7 +81,6 @@ export class UserController {
     }
   }
 
-  @RBAC(Role.ADMIN)
   @Get('/:email')
   async findUserByEmail(@Param('email') email: string, @Res() res: Response) {
     try {
