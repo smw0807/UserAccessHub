@@ -36,6 +36,18 @@ export class AuthUtils {
     );
   }
 
+  parseToken(token: string, res: Response) {
+    const tokenValues = token.split(' ');
+    if (tokenValues.length !== 2) {
+      throw this.getInvalidTokenResult(res);
+    }
+    const tokenValue = tokenValues[1];
+    if (!tokenValue) {
+      throw this.getInvalidTokenResult(res);
+    }
+    return tokenValue;
+  }
+
   /**
    * [400] 이메일, 패스워드 없음
    * @param res

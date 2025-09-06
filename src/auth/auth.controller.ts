@@ -80,10 +80,13 @@ export class AuthController {
   @Post('verify/token')
   async verifyToken(@Req() req: Request, @Res() res: Response) {
     try {
+      const token = req.headers.authorization;
+      const tokenValue = this.authUtils.parseToken(token, res);
+      if (!tokenValue) {
+        return this.authUtils.getInvalidTokenResult(res);
+      }
       // access token 검증
-      const decoded = await this.authService.verifyToken(
-        req.headers.authorization,
-      );
+      const decoded = await this.authService.verifyToken(tokenValue);
       if (!decoded) {
         return this.authUtils.getInvalidTokenResult(res);
       }
@@ -105,9 +108,12 @@ export class AuthController {
   @Post('refresh/token')
   async refreshToken(@Req() req: Request, @Res() res: Response) {
     try {
-      const decoded = await this.authService.verifyToken(
-        req.headers.authorization,
-      );
+      const token = req.headers.authorization;
+      const tokenValue = this.authUtils.parseToken(token, res);
+      if (!tokenValue) {
+        return this.authUtils.getInvalidTokenResult(res);
+      }
+      const decoded = await this.authService.verifyToken(tokenValue);
       if (!decoded) {
         return this.authUtils.getInvalidTokenResult(res);
       }
