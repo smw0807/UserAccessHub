@@ -30,16 +30,19 @@ export class AuthService {
         payload['token_type'] = tokens.token_type;
       }
       // 토큰 만료 기간 설정 (기본값 7일)
-      const expiryDate = tokens?.expiry_date ?? 1000 * 60 * 60 * 24 * 7;
-      const accessToken = this.jwtService.sign(payload);
+      const accessExpiryDate = tokens?.expiry_date ?? 1000 * 60 * 60 * 24;
+      const accessToken = this.jwtService.sign(payload, {
+        expiresIn: accessExpiryDate,
+      });
+      const refreshExpiryDate = tokens?.expiry_date ?? 1000 * 60 * 60 * 24 * 7;
       const refreshToken = this.jwtService.sign(payload, {
-        expiresIn: expiryDate,
+        expiresIn: refreshExpiryDate,
       });
       this.logger.log(`${user.email} 토큰 발급 완료`);
       return {
         access_token: accessToken,
         refresh_token: refreshToken,
-        expiry_date: expiryDate,
+        expiry_date: accessExpiryDate,
       };
     } catch (e) {
       this.logger.error(e);
