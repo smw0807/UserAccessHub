@@ -73,7 +73,11 @@ export class AuthGoogleController {
         expiry_date: tokens.expiry_date,
       });
 
-      return res.status(200).send(tokenInfo);
+      return res.status(200).send({
+        success: true,
+        message: '구글 로그인 성공',
+        token: tokenInfo,
+      });
     } catch (e) {
       this.logger.error(e);
       return res.status(500).send(e.message);

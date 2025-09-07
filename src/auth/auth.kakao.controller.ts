@@ -72,7 +72,11 @@ export class AuthKakaoController {
       // 토큰 생성
       const tokenInfo = await this.authService.makeTokens(user, tokens);
 
-      return res.status(200).send(tokenInfo);
+      return res.status(200).send({
+        success: true,
+        message: '카카오 로그인 성공',
+        token: tokenInfo,
+      });
     } catch (e) {
       this.logger.error(e);
       return res.status(500).send(e.message);
